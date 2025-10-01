@@ -44,6 +44,12 @@ export async function clientRefresh() {
     const { refreshToken: newRefreshToken, accessToken } = signJwt({
       _id: foundUser._id,
       role: foundUser.role,
+      name: foundUser.name,
+      email: foundUser.email,
+      username: foundUser.username,
+      walletBalance: foundUser.walletBalance,
+      owner_id: foundUser.owner_id,
+      avatar: foundUser.avatar,
     });
 
     foundUser.refresh_token = newRefreshToken;

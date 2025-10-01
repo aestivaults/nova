@@ -10,8 +10,6 @@ import Button from "../ui/button";
 
 export default function Hero({ nfts }: { nfts: NftPayload[] }) {
   const videoRef = useRef(null);
-
-  const heroItems = getRandomItems(nfts, 4);
   const creators = getRandomItems(topCreators, 4);
 
   return (
@@ -72,7 +70,7 @@ export default function Hero({ nfts }: { nfts: NftPayload[] }) {
 
           <div className="relative fade-in-right">
             <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto">
-              {heroItems.map((nft, index) => (
+              {nfts.slice(0, 4).map((nft, index) => (
                 <div
                   key={nft._id}
                   className={`glass-card relative overflow-hidden border.re rounded-lg float-animation-${

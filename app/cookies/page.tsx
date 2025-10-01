@@ -1,5 +1,5 @@
 "use client";
-import { ArrowRight, Shield, Zap } from "lucide-react";
+import { ArrowRight, Zap } from "lucide-react";
 import Footer from "../components/layout/Footer";
 import Navbar from "../components/layout/navbar";
 import { policySections } from "../data/data";
@@ -26,7 +26,7 @@ export default function CookiePolicy() {
               AUREUSNOVA Policy v2.0
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent leading-tight">
-              Cookie Quantum Policy
+              Cookie Policy
               <span className="block text-2xl sm:text-3xl md:text-4xl font-mono text-white/80">
                 Privacy Entanglement
               </span>
@@ -126,51 +126,6 @@ export default function CookiePolicy() {
                 </div>
               </div>
             ))}
-          </div>
-
-          {/* Consent Management */}
-          <div className="relative mt-16 sm:mt-20 lg:mt-24">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-pink-900/20 to-cyan-900/20 rounded-3xl blur-xl -z-10"></div>
-            <div className="relative glass-card rounded-3xl overflow-hidden border border-purple-500/20 backdrop-blur-sm">
-              <div className="p-8 sm:p-10 lg:p-12 bg-gradient-to-br from-black/80 via-gray-900/80 to-black/80 backdrop-blur-xl border border-gray-800/50">
-                <div className="text-center relative">
-                  <div className="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-br from-purple-500/15 to-pink-500/15 border border-purple-500/30 shadow-purple-glow mb-6 sm:mb-8 mx-auto">
-                    <Shield className="w-8 h-8 sm:w-10 sm:h-10 text-gradient-primary" />
-                  </div>
-                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-black mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
-                    Manage Quantum Consent
-                  </h3>
-                  <p className="text-gray-300 mb-8 sm:mb-10 leading-relaxed text-lg max-w-2xl mx-auto font-light">
-                    Exercise control over your digital footprint in the
-                    multiverse.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <a
-                      href="/settings"
-                      className="group relative inline-flex items-center gap-3 px-8 py-4 sm:px-10 sm:py-5 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 shadow-2xl hover:shadow-purple-glow transform hover:-translate-y-1 font-mono tracking-wide overflow-hidden"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                      <Shield className="w-4 h-4 relative z-10 group-hover:-translate-y-0.5 transition-transform" />
-                      <span className="relative z-10">Update Preferences</span>
-                    </a>
-                    <a
-                      href="/contact"
-                      className="group inline-flex items-center gap-3 px-8 py-4 sm:px-10 sm:py-5 rounded-2xl border-2 border-purple-500/30 bg-black/30 backdrop-blur-sm text-purple-300 hover:border-purple-400 hover:bg-purple-500/10 hover:text-purple-200 transition-all duration-300 font-mono tracking-wide relative overflow-hidden"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                      <div className="relative z-10 w-2 h-2 rounded-full bg-gradient-to-r from-green-400 to-cyan-400 animate-ping"></div>
-                      <span className="relative z-10">Oracle Inquiry</span>
-                    </a>
-                  </div>
-                  <div className="flex items-center justify-center gap-2 mt-8 pt-6 border-t border-gray-700/30">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-xs font-mono text-gray-500 uppercase tracking-wider">
-                      Policy: Active • On-Chain
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </main>

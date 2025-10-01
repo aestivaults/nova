@@ -1,13 +1,15 @@
 "use client";
 import Button from "@/app/components/ui/button";
-import { useAuth } from "@/app/context/AuthContext";
+import { PageLoader } from "@/app/components/ui/Loader";
 import { useNotifications } from "@/app/context/NotificationProvider";
 import { retryUploadImage } from "@/app/lib/uploadImages";
+import { User as Iuser } from "@/app/types/user";
 import { api } from "@/app/utils/api";
 import { parseCommaSeparated } from "@/app/utils/formatters";
+import axios from "axios";
 import { MessageCircle, Star, User } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import AccountDetails from "./profile/AccountDetails";
 import ProfileCategories from "./profile/ProfileCategories";
 import ProfileData from "./profile/ProfileData";
@@ -42,7 +44,7 @@ export interface UserProfile {
 }
 
 export default function ProfileSettings() {
-  const { user } = useAuth();
+  const [user, setUser] = useState<Iuser | null>(null);
   const [profileImg, setProfileImg] = useState<File | null>(null);
   const { addNotification, toast } = useNotifications();
   const [isLoading, setIsLoading] = useState(false);
@@ -67,11 +69,58 @@ export default function ProfileSettings() {
     totalVolume: user?.totalVolume || 0,
     favoriteCategories: user?.favoriteCategories?.join(", ") || "",
     socialMedia: {
-      twitter: user?.socialMedia?.twitter || "",
-      discord: user?.socialMedia?.discord || "",
-      instagram: user?.socialMedia?.instagram || "",
+      twitter: user?.socialMedia.twitter || "",
+      discord: user?.socialMedia.discord || "",
+      instagram: user?.socialMedia.instagram || "",
     },
   });
+
+  useEffect(() => {
+    async function getUser() {
+      try {
+        const { data } = await api.get("/users");
+        const fetchedUser = data.data as Iuser;
+
+        if (fetchedUser) {
+          setUser(fetchedUser);
+          setProfileForm({
+            username: fetchedUser.username,
+            name: fetchedUser.name,
+            email: fetchedUser.email,
+            avatar: fetchedUser.avatar || "/pfp.png",
+            location: fetchedUser.location,
+            userType: fetchedUser.userType,
+            badges: fetchedUser.badges?.join(", "),
+            experienceLevel: fetchedUser.experienceLevel,
+            availability: fetchedUser.availability,
+            tags: fetchedUser.tags?.join(", "),
+            tradingStyle: fetchedUser.tradingStyle,
+            preferredBlockchain: fetchedUser.preferredBlockchain,
+            nftsOwned: fetchedUser.nftsOwned,
+            nftsSold: fetchedUser.nftsSold,
+            followers: fetchedUser.followers,
+            totalVolume: fetchedUser.totalVolume,
+            favoriteCategories:
+              fetchedUser.favoriteCategories?.join(", ") || "",
+            socialMedia: {
+              twitter: fetchedUser.socialMedia?.twitter || "",
+              discord: fetchedUser.socialMedia?.discord || "",
+              instagram: fetchedUser.socialMedia?.instagram || "",
+            },
+          });
+        }
+      } catch (err) {
+        if (axios.isAxiosError(err)) {
+          console.log("Axios error while fetching user:", err.response?.status);
+        } else {
+          console.error("Unexpected error while fetching user:", err);
+        }
+      }
+    }
+    getUser();
+  }, []);
+
+  if (!profileForm) return <PageLoader />;
 
   const handleProfileChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

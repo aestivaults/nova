@@ -1,17 +1,14 @@
 "use client";
 import NFTCard from "@/app/components/ui/NFTCard";
+import { NftPayload } from "@/app/types/nftTypes";
 import { AnimatePresence, motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Button from "../ui/button";
-import { NftPayload } from "@/app/types/nftTypes";
-import { getRandomItems } from "@/app/utils/formatters";
 
-const HeroCarousel = ({ data: carouselItems }: { data: NftPayload[] }) => {
-  const data = getRandomItems<NftPayload>(carouselItems, 20);
+const HeroCarousel = ({ data }: { data: NftPayload[] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-
   const router = useRouter();
   const navigate = (path: string) => router.push(path);
 
@@ -27,7 +24,6 @@ const HeroCarousel = ({ data: carouselItems }: { data: NftPayload[] }) => {
 
   return (
     <div className="relative md:h-[600px] h-screen p-8 w-full overflow-hidden bg-gradient-to-b from-dark to-darker">
-      {/* Background Image with Parallax Effect */}
       <AnimatePresence mode="wait">
         <motion.div
           key={current?._id}
@@ -54,9 +50,6 @@ const HeroCarousel = ({ data: carouselItems }: { data: NftPayload[] }) => {
           )}
 
           <div className="absolute inset-0 bg-black/60" />
-          {/* <div
-            className={`absolute inset-0 bg-gradient-to-r ${current?.gradient} opacity-40`}
-          /> */}
         </motion.div>
       </AnimatePresence>
 
@@ -104,21 +97,11 @@ const HeroCarousel = ({ data: carouselItems }: { data: NftPayload[] }) => {
                   className="flex flex-wrap gap-4"
                 >
                   <Button
-                    onClick={() => navigate("/explore")}
+                    onClick={() => navigate(`/marketplace/${current._id}`)}
                     className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group"
                   >
-                    <motion.div
-                      className="absolute inset-0 bg-white/20"
-                      animate={{ x: ["-100%", "100%"] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                    />
-
                     <Sparkles className="w-5 h-5 mr-2 relative z-10" />
-                    <span className="relative z-10">Explore Collection</span>
+                    <span className="relative z-10">View Nft </span>
                   </Button>
                 </motion.div>
               </motion.div>
@@ -135,11 +118,6 @@ const HeroCarousel = ({ data: carouselItems }: { data: NftPayload[] }) => {
                 className="relative"
               >
                 <div className="relative max-h-[90%] aspect-[4/5] w-full max-w-md">
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-r ${"from-primary-500 via-secondary-600 to-primary-500"} rounded-2xl blur-xl opacity-50`}
-                  />
-
-                  {/* NFT Card */}
                   <NFTCard variant="compact" nft={current} />
                 </div>
               </motion.div>

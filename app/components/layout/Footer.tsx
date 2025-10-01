@@ -99,14 +99,7 @@ export default function Footer() {
                   Collections
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/creators"
-                  className="text-light/70 hover:text-primary-400 transition-colors"
-                >
-                  Creators
-                </Link>
-              </li>
+
               <li>
                 <Link
                   href="/auctions"

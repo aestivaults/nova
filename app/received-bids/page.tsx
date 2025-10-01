@@ -3,6 +3,8 @@ import Tabs from "../admin/bids/BidTabs";
 import BidWithNFT from "../admin/bids/BidwithNft";
 import { Bid } from "../types/bids";
 import { createServerApi } from "../utils/api";
+import Navbar from "../components/layout/navbar";
+import Footer from "../components/layout/Footer";
 
 export default async function Bidding({
   searchParams,
@@ -18,7 +20,7 @@ export default async function Bidding({
 
   let userBids: Bid[] = [];
 
-  const res = await serverapi.get("/admin/bids");
+  const res = await serverapi.get("/bids/received");
   if (res.data.data) userBids = res.data.data;
 
   const getFilteredBids = () => {
@@ -43,8 +45,9 @@ export default async function Bidding({
   const filteredBids = getFilteredBids();
 
   return (
-    <div className="py-25">
-      <div className="container">
+    <div className="pt-25">
+      <Navbar />
+      <div className="container min-h-screen">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-2">Bids on Your NFTs</h1>
@@ -69,12 +72,13 @@ export default async function Bidding({
               {activeTab === "active"
                 ? "You don't have any active bids at the moment."
                 : activeTab === "outbid"
-                ? "You haven't been outbid on any auctions."
-                : "You don't have any bid history yet."}
+                  ? "You haven't been outbid on any auctions."
+                  : "You don't have any bid history yet."}
             </p>
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 }

@@ -6,7 +6,7 @@ export default function WhyBuild() {
     <div className="container">
       <div className="group relative overflow-hidden">
         <div className="relative">
-          <div className="p-8 sm:p-10 lg:p-12">
+          <div className="py-8">
             <h3 className="text-3xl sm:text-4xl font-black mb-8 sm:mb-10 text-center bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
               Why Build With AUREUSNOVA?
             </h3>

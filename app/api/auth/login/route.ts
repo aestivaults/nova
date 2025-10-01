@@ -60,6 +60,11 @@ export async function POST(req: NextRequest) {
       _id: safeUser._id,
       role: safeUser.role,
       name: safeUser.name,
+      username: safeUser.username,
+      email: safeUser.email,
+      walletBalance: safeUser.walletBalance,
+      owner_id: safeUser.owner_id,
+      avatar: safeUser.avatar,
     });
 
     user.refresh_token = refreshToken;

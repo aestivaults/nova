@@ -15,6 +15,7 @@ import {
   Layers,
   Lock,
   Palette,
+  Rocket,
   Scale,
   Shield,
   ShoppingCart,
@@ -26,6 +27,8 @@ import {
 } from "lucide-react";
 import { FAQCategory } from "../faq/page";
 import { PolicySection } from "../cookies/page";
+import { SupportSection } from "../types/support";
+import { AboutSection, TeamMember } from "../types/about";
 export const sections = [
   {
     id: "information-collection",
@@ -738,11 +741,11 @@ export const whyBuild = [
 export const policySections: PolicySection[] = [
   {
     id: "introduction",
-    title: "Quantum Cookie Protocol",
+    title: "Cookie Protocol",
     icon: Cookie,
     color: "primary",
     content:
-      "In compliance with interstellar data regulations as of 2025, AUREUSNOVA deploys quantum-encrypted cookies to enhance your multiverse navigation. These digital artifacts track your Web3 interactions while preserving zero-knowledge privacy.",
+      "In compliance with interstellar data regulations as of 2025, AUREUSNOVA deploys encrypted cookies to enhance your NovaVerse navigation. These digital artifacts track your Web3 interactions while preserving zero-knowledge privacy.",
   },
   {
     id: "types",
@@ -750,7 +753,7 @@ export const policySections: PolicySection[] = [
     icon: Shield,
     color: "secondary",
     content:
-      "Essential Quantum Bits: Required for core platform entanglement. Analytical Nodes: Aggregate anonymous metrics for AI optimization. Targeting Photons: Personalize your metaverse experience with decentralized ads. All cookies are blockchain-audited and self-destruct after 365 solar cycles.",
+      "Essential Bits: Required for core platform entanglement. Analytical Nodes: Aggregate anonymous metrics for AI optimization. Targeting Photons: Personalize your metaverse experience with decentralized ads. All cookies are blockchain-audited and self-destruct after 365 solar cycles.",
   },
   {
     id: "management",
@@ -758,7 +761,7 @@ export const policySections: PolicySection[] = [
     icon: Zap,
     color: "primary",
     content:
-      "Exercise your sovereign rights via our neural consent interface. Opt-out of non-essential cookies through your profile oracle. Note: Disabling may disrupt hyperspace functionality. We honor Do Not Track signals from quantum browsers.",
+      "Exercise your sovereign rights via our neural consent interface. Opt-out of non-essential cookies through your profile oracle. Note: Disabling may disrupt hyperspace functionality. We honor Do Not Track signals from browsers.",
   },
   {
     id: "updates",
@@ -766,6 +769,90 @@ export const policySections: PolicySection[] = [
     icon: ArrowRight,
     color: "secondary",
     content:
-      "This policy undergoes quantum upgrades periodically. Last revision: September 23, 2025. Continued platform immersion implies acceptance of updates. For inquiries, consult our AI compliance oracle.",
+      "This policy undergoes upgrades periodically. Last revision: September 23, 2025. Continued platform immersion implies acceptance of updates. For inquiries, consult our AI compliance oracle.",
+  },
+];
+
+export const supportSections: SupportSection[] = [
+  {
+    id: "common-issues",
+    title: "Network Issues",
+    icon: HelpCircle,
+    color: "primary",
+    faqs: [
+      {
+        id: "wallet-connection",
+        question: "How to resolve neural wallet synchronization errors?",
+        answer:
+          "Verify your entanglement settings and ensure layer-3 compatibility. Refresh the NovaVerse node or switch to a decentralized VPN. For persistent anomalies, initiate a support hologram.",
+      },
+      {
+        id: "transaction-failed",
+        question: "Why did my interdimensional transfer fail?",
+        answer:
+          "Failures may occur due to temporal gas fluctuations or multichain interference. Monitor zero-knowledge proofs and allocate sufficient ETH. Contact our AI oracle for diagnostics.",
+      },
+    ],
+  },
+  {
+    id: "technical-support",
+    title: "AI-Enhanced Technical Aid",
+    icon: Zap,
+    color: "secondary",
+    faqs: [
+      {
+        id: "slow-loading",
+        question: "Why is the metaverse interface experiencing latency?",
+        answer:
+          "Latency could stem from neural network overload or cosmic ray interference. Optimize your browser's cache, or engage our AI accelerator. Holographic support available 24/7.",
+      },
+      {
+        id: "mobile-support",
+        question: "Does AUREUSNOVA integrate with holographic mobile nodes?",
+        answer:
+          "Affirmative. We support advanced mobile protocols like NeuralMask and Connect. Ensure your device is updated to Web3.5 standards for optimal NovaVerse immersion.",
+      },
+    ],
+  },
+];
+
+export const aboutSections: AboutSection[] = [
+  {
+    id: "mission",
+    title: "Our Mission",
+    icon: Rocket,
+    color: "primary",
+    content:
+      "In the year 2025, AUREUSNOVA is pioneering the next era of decentralized digital ownership. We empower creators and collectors with secure, AI-enhanced NFT protocols that transcend traditional blockchain limitations, fostering a NovaVerse of interoperable digital assets.",
+  },
+  {
+    id: "vision",
+    title: "Our Vision",
+    icon: Zap,
+    color: "secondary",
+    content:
+      "Envisioning a hyper-connected Web3 ecosystem where NFTs evolve into sentient digital entities. By 2030, we aim to integrate neural networks with blockchain, enabling self-governing DAOs and zero-knowledge provenance for infinite scalability in the metaverse economy.",
+  },
+];
+
+// Sample team data with futuristic twist
+export const teamMembers: TeamMember[] = [
+  {
+    id: "team1",
+    name: "Alex Nova",
+    role: "Founder & CEO",
+    bio: "A blockchain visionary with expertise in post cryptography, Alex is architecting the fusion of AI and NFTs for a decentralized future.",
+  },
+  {
+    id: "team2",
+    name: "Samantha Ether",
+    role: "AI Protocol Lead",
+    bio: "Samantha engineers neural smart contracts, optimizing for hyperscale efficiency in layer-2 solutions and metaverse integrations.",
+  },
+  {
+    id: "team3",
+    name: "Jordan Crypto",
+    role: "Metaverse Ambassador",
+    bio: "Jordan orchestrates secure communities, bridging real-world assets with virtual economies in the expanding Web3 NovaVerse.",
   },
 ];

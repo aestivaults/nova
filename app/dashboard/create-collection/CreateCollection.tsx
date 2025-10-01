@@ -3,22 +3,23 @@
 import Button from "@/app/components/ui/button";
 import { categories } from "@/app/components/ui/Categories";
 import CollectionCard from "@/app/components/ui/CollectionCard";
-import { useAuth } from "@/app/context/AuthContext";
+import { useNotifications } from "@/app/context/NotificationProvider";
+import { User } from "@/app/types/user";
+import { api } from "@/app/utils/api";
+import axios from "axios";
 import { motion } from "framer-motion";
 import { Sparkles, Star, TrendingUp, Zap } from "lucide-react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import MediaUpload from "./MediaUpload";
 import SocialLinks from "./SocialLinks";
-import { useNotifications } from "@/app/context/NotificationProvider";
 
 export default function CreateCollection() {
-  const { user } = useAuth();
   const { pending: isPending } = useFormStatus();
   const { toast } = useNotifications();
+  const [user, setUser] = useState<User | null>(null);
 
   const [media_type, setmedia_type] = useState<"image" | "video" | null>(null);
-
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -40,6 +41,32 @@ export default function CreateCollection() {
   });
 
   const [socialLinks, setSocialLinks] = useState(user?.socialMedia);
+
+  useEffect(() => {
+    async function getUser() {
+      try {
+        const { data } = await api.get("/users");
+        const fetchedUser: User = data.data;
+        if (fetchedUser) {
+          setUser(fetchedUser);
+          setSocialLinks(fetchedUser.socialMedia);
+          setFormData((prev) => ({
+            ...prev,
+            owners: [fetchedUser],
+            owner: fetchedUser,
+            creator: fetchedUser,
+          }));
+        }
+      } catch (err) {
+        if (axios.isAxiosError(err)) {
+          console.log("Axios error while fetching user:", err.response?.status);
+        } else {
+          console.error("Unexpected error while fetching user:", err);
+        }
+      }
+    }
+    getUser();
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const file = e.target.files?.[0];

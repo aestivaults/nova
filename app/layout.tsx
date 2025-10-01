@@ -1,14 +1,13 @@
 // app/layout.tsx or app/(main)/layout.tsx
-import axios from "axios";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
+import { verifyJwt } from "./backend/jwt/verifyjwt";
+import ContextProvider from "./context";
 import Provider from "./context/Providers";
 import "./styles/animations.css";
 import "./styles/components.css";
 import "./styles/globals.css";
 import { User } from "./types/user";
-import { createServerApi } from "./utils/api";
-import ContextProvider from "./context";
 
 export const metadata: Metadata = {
   title: "AureusNova",
@@ -22,22 +21,11 @@ export default async function RootLayout({
 }) {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
-  const refreshToken = cookieStore.get("refreshToken")?.value;
-  const serverApi = createServerApi(token, refreshToken);
   let user: User | null = null;
 
-  try {
-    const { data } = await serverApi.get("/users");
-
-    user = data.data;
-  } catch (err) {
-    if (axios.isAxiosError(err)) {
-      console.log("Axios error while fetching user:", err.response?.status);
-    } else {
-      console.error("Unexpected error while fetching user:", err);
-    }
-
-    user = null;
+  if (token) {
+    const decoded = verifyJwt(token) as User | null;
+    if (decoded) user = decoded;
   }
 
   return (

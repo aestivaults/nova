@@ -19,8 +19,8 @@ export default async function OurPartners({
     <div className="min-h-screen">
       <Navbar />
 
-      <main className="container mx-auto ">
-        <div className="px-4 py-12 sm:py-16 lg:py-20">
+      <main className="container mx-auto">
+        <div className="py-12 sm:py-16 lg:py-20">
           <Header />
           <TabNav />
           {activeTab === "overview" && <Overview />}

@@ -2,7 +2,6 @@
 import NFTCard from "@/app/components/ui/NFTCard";
 import { useSetParams } from "@/app/hooks/useSetParams";
 import { NftPayload } from "@/app/types/nftTypes";
-import { getRandomItems } from "@/app/utils/formatters";
 
 import { useEffect, useState } from "react";
 import Slider from "../ui/Slider";
@@ -11,7 +10,6 @@ export default function Auction({ nfts }: { nfts: NftPayload[] }) {
   const [type, setType] = useState<"default" | "compact">("compact");
   const { navigate } = useSetParams();
 
-  // Handle bid on auction
   const handleBid = (nft: NftPayload) => {
     navigate(`/marketplace/${nft._id}`);
   };
@@ -40,8 +38,6 @@ export default function Auction({ nfts }: { nfts: NftPayload[] }) {
     (item) => new Date(item.auctionEndTime || 0) > new Date()
   );
 
-  const trendingnfts = getRandomItems(liveAuctions, 20);
-
   const renderNFTCard = (nft: NftPayload) => (
     <NFTCard
       variant={type}
@@ -58,7 +54,7 @@ export default function Auction({ nfts }: { nfts: NftPayload[] }) {
         <Slider
           title={"Live Auctions"}
           subtitle="Bid on these active auctions before they end"
-          items={trendingnfts}
+          items={liveAuctions}
           renderItem={renderNFTCard}
           slidesToShow={4}
         />

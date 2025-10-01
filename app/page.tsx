@@ -12,19 +12,27 @@ import { stats } from "./data/stats";
 import { getNfts } from "./lib/getnfts";
 import { NftPayload } from "./types/nftTypes";
 import WhyBuild from "./components/home/WhyBuild";
+import { getRandomItems } from "./utils/formatters";
 
 export default async function Home() {
-  const { data, error } = await getNfts("3");
+  let randomnfts: NftPayload[] = [];
+
+  try {
+    const { data, error } = await getNfts("3");
+    if (data) randomnfts = getRandomItems<NftPayload>(data, 20);
+  } catch (error) {
+    console.log(error);
+  }
 
   return (
     <>
       <Navbar />
-      <Hero nfts={data as NftPayload[]} />
+      <Hero nfts={randomnfts as NftPayload[]} />
       <Stats small={false} stats={stats} />
       <Suspense fallback={null}>
-        <HeroCarousel data={data as NftPayload[]} />
-        <TrendingNFTs nfts={data as NftPayload[]} />
-        <Auction nfts={data as NftPayload[]} />
+        <HeroCarousel data={randomnfts as NftPayload[]} />
+        <TrendingNFTs nfts={randomnfts as NftPayload[]} />
+        <Auction nfts={randomnfts as NftPayload[]} />
       </Suspense>
       <WhatisAureus />
       <TopCreators />

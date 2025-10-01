@@ -1,9 +1,8 @@
 "use client";
 
 import NFTCard from "@/app/components/ui/NFTCard";
-import { useSetParams } from "@/app/hooks/useSetParams";
-import { getRandomItems } from "@/app/utils/formatters";
 import Slider from "@/app/components/ui/Slider";
+import { useSetParams } from "@/app/hooks/useSetParams";
 import { NftPayload } from "@/app/types/nftTypes";
 import { useEffect, useState } from "react";
 
@@ -45,8 +44,6 @@ export default function TrendingNFTs({ nfts }: { nfts: NftPayload[] }) {
     />
   );
 
-  const trendingnfts = getRandomItems(nfts, 20);
-
   return (
     <div className="py-16">
       <div className="container">
@@ -54,7 +51,7 @@ export default function TrendingNFTs({ nfts }: { nfts: NftPayload[] }) {
           title="Trending NFTs"
           subtitle="Explore trending and hot NFTs in the market"
           slidesToShow={4}
-          items={trendingnfts as NftPayload[]}
+          items={nfts as NftPayload[]}
           renderItem={renderNFTCard}
           autoplay={true}
         />

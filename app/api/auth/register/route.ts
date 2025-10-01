@@ -63,6 +63,11 @@ export async function POST(req: NextRequest) {
       _id: safeUser._id,
       role: safeUser.role,
       name: safeUser.name,
+      email: safeUser.email,
+      username: safeUser.username,
+      walletBalance: safeUser.walletBalance,
+      owner_id: safeUser.owner_id,
+      avatar: safeUser.avatar,
     });
 
     await User.findByIdAndUpdate(safeUser._id, { refresh_token: refreshToken });

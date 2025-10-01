@@ -53,7 +53,7 @@ export default function Auctions() {
             AUREUSNOVA Auctions v3.0
           </div>
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold mb-6 bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 bg-clip-text text-transparent leading-none">
-            Quantum Auctions
+            Auctions
             <span className="block text-3xl sm:text-4xl md:text-5xl font-mono text-indigo-100/70 mt-2">
               Bid on the Future
             </span>
@@ -62,7 +62,7 @@ export default function Auctions() {
             Discover and bid on exclusive NFTs in real-time auctions.
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-indigo-300">
               {" "}
-              Powered by quantum-secure blockchain.
+              Powered by secure blockchain.
             </span>
           </p>
         </section>
