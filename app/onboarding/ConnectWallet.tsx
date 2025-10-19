@@ -1,12 +1,10 @@
 "use client";
 import Button from "@/app/components/ui/button";
-import { LucideSkipForward, SkipForward, Wallet } from "lucide-react";
+import { LucideSkipForward, Wallet } from "lucide-react";
 import Image from "next/image";
 import { useSetParams } from "../hooks/useSetParams";
-import { useAppKit } from "@reown/appkit/react";
 export default function ConnectWallet() {
   const { navigate } = useSetParams();
-  const { open } = useAppKit();
   return (
     <div className="animate-fade-in text-center">
       <div className="flex items-center gap-3 mb-4 justify-center">
@@ -25,7 +23,7 @@ export default function ConnectWallet() {
           className="mx-auto animate-bounce-slow"
         />
       </div>
-      <Button fullWidth variant="primary" onClick={() => open()}>
+      <Button fullWidth variant="primary">
         <Wallet className="w-4 h-4 mr-2" />
         Connect Wallet
       </Button>

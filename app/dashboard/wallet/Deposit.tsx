@@ -3,7 +3,6 @@ import { generateWalletAddress } from "@/app/backend/jwt/create_ids";
 import Button from "@/app/components/ui/button";
 import { useNotifications } from "@/app/context/NotificationProvider";
 import { api } from "@/app/utils/api";
-import { baseETH, pay } from "@reown/appkit-pay";
 import { AxiosError } from "axios";
 import { Copy, TriangleAlert } from "lucide-react";
 import { useState } from "react";
@@ -59,27 +58,6 @@ export default function Deposit() {
   };
 
   const [ethAmount, setEthAmount] = useState("");
-
-  async function handlepay() {
-    try {
-      setIsLoading({ deposit: false, wallet: true });
-      const result = await pay({
-        recipient: "0xd5d1cA5824cF7f40878F6259b9103a6e2bEDfF50",
-        amount: 0.0001,
-        paymentAsset: baseETH,
-      });
-
-      if (result.success) {
-        console.log("Payment successful: " + result.result);
-      } else {
-        console.error("Payment error: " + result.error);
-      }
-    } catch (error) {
-      console.log("Payment failed", error);
-    } finally {
-      setIsLoading({ deposit: false, wallet: false });
-    }
-  }
 
   return (
     <div className="glass-card p-6">
@@ -169,12 +147,7 @@ export default function Deposit() {
               value={ethAmount}
               onChange={(e) => setEthAmount(e.target.value)}
             />
-            <Button
-              onClick={handlepay}
-              isLoading={isLoading.wallet}
-              fullWidth
-              className="mt-2"
-            >
+            <Button isLoading={isLoading.wallet} fullWidth className="mt-2">
               Deposit from Wallet
             </Button>
           </div>

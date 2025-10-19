@@ -5,17 +5,8 @@ import { useAuth } from "@/app/context/AuthContext";
 import { useSetParams } from "@/app/hooks/useSetParams";
 import { balanceHistory } from "@/app/types/general";
 import { formatCurrency, formatNumber } from "@/app/utils/formatters";
-import {
-  useAppKit,
-  useAppKitAccount,
-  useAppKitNetworkCore,
-  useAppKitProvider,
-  type Provider,
-} from "@reown/appkit/react";
-import { BrowserProvider, formatEther } from "ethers";
-import { ArrowDown, ArrowUp, Copy } from "lucide-react";
+import { ArrowDown, ArrowUp } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import WalletChart from "./WalletChart";
 
 export default function WalletOverview({
@@ -26,29 +17,10 @@ export default function WalletOverview({
   balanceHistory: balanceHistory[];
 }) {
   const { user } = useAuth();
-  const { open } = useAppKit();
   const { setParams } = useSetParams();
   const handleTabChange = (tab: string) => {
     setParams({ tab: tab });
   };
-
-  const [balance, setbalance] = useState(0);
-
-  const { address, isConnected } = useAppKitAccount();
-  const { chainId } = useAppKitNetworkCore();
-  const { walletProvider } = useAppKitProvider<Provider>("eip155");
-
-  useEffect(() => {
-    const handleGetBalance = async () => {
-      if (!isConnected || !address) return;
-      const provider = new BrowserProvider(walletProvider, chainId);
-      const balance = await provider.getBalance(address);
-      const eth = formatEther(balance);
-      setbalance(Number(eth));
-    };
-
-    handleGetBalance();
-  }, [walletProvider, chainId, address, isConnected]);
 
   return (
     <div className="glass-card p-6 mb-8">
@@ -56,29 +28,6 @@ export default function WalletOverview({
         <div className="flex flex-col">
           <div className="mb-6">
             <h2 className="text-lg font-medium mb-2">Wallet Address</h2>
-            <div className="flex items-center">
-              {isConnected ? (
-                <>
-                  <div className="bg-white/5 rounded-lg px-4 py-3 flex-1 font-mono overflow-hidden truncate">
-                    {address}
-                  </div>
-                  <button
-                    className="ml-2 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition-colors"
-                    title="Copy address"
-                  >
-                    <Copy />
-                  </button>
-                </>
-              ) : (
-                <div className="bg-white/5 flex items-center gap-3 rounded-lg px-4 py-3 flex-1 text-white/50">
-                  No wallet connected{" "}
-                  <Button onClick={() => open()} variant="primary">
-                    {" "}
-                    Connect Wallet
-                  </Button>
-                </div>
-              )}
-            </div>
           </div>
 
           <div className="mb-6">
@@ -101,11 +50,11 @@ export default function WalletOverview({
                 </div>
                 <div className="text-right">
                   <p className="text-xl font-bold">
-                    {formatNumber((user?.walletBalance || 0) + balance)} ETH
+                    {formatNumber(user?.walletBalance || 0)} ETH
                   </p>
                   <p className="text-sm text-white/60">
                     {formatCurrency(
-                      ((user?.walletBalance || 0) + balance) * ethereumvalue,
+                      (user?.walletBalance || 0) * ethereumvalue,
                       "USD"
                     )}
                   </p>
@@ -136,12 +85,6 @@ export default function WalletOverview({
                 <div>
                   <p className="font-medium">Wallet Balance</p>
                   <p className="text-sm text-white/60">Connected Wallet</p>
-                </div>
-                <div className="text-right">
-                  <p className="font-bold">{formatNumber(balance)} ETH</p>
-                  <p className="text-sm text-white/60">
-                    {formatCurrency(balance * ethereumvalue, "USD")}
-                  </p>
                 </div>
               </div>
             </div>

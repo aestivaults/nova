@@ -6,7 +6,6 @@ import { useState } from "react";
 import { createContext } from "react";
 import { themeOptions } from "../data/theme";
 import { Theme } from "../types/theme";
-import { useAppKitTheme } from "@reown/appkit/react";
 
 export type ThemeName = keyof typeof themeOptions;
 
@@ -21,7 +20,6 @@ const ThemeContext = createContext<ThemeContextType | null>(null);
 
 export default function ThemeProvider({ children }: { children: ReactNode }) {
   const [currentTheme, setCurrentTheme] = useState<ThemeName>("default");
-  const { setThemeVariables } = useAppKitTheme();
 
   useEffect(() => {
     const savedTheme =
@@ -43,10 +41,7 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
 
     // Base colors
     setCSSVar("primary-color", theme.primaryColor);
-    setThemeVariables({
-      "--w3m-color-mix": theme.secondaryColor,
-      "--w3m-color-mix-strength": 10,
-    });
+
     setCSSVar("secondary-color", theme.secondaryColor);
     setCSSVar("accent-color", theme.accentColor);
     setCSSVar("dark-bg", theme.darkBg);

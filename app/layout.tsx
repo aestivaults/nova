@@ -1,8 +1,7 @@
 // app/layout.tsx or app/(main)/layout.tsx
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { verifyJwt } from "./backend/jwt/verifyjwt";
-import ContextProvider from "./context";
+import { verifyRefreshJwt } from "./backend/jwt/verifyjwt";
 import Provider from "./context/Providers";
 import "./styles/animations.css";
 import "./styles/components.css";
@@ -20,20 +19,18 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
+  const token = cookieStore.get("refreshToken")?.value;
   let user: User | null = null;
 
   if (token) {
-    const decoded = verifyJwt(token) as User | null;
+    const decoded = verifyRefreshJwt(token) as User | null;
     if (decoded) user = decoded;
   }
 
   return (
     <html lang="en">
       <body>
-        <ContextProvider>
-          <Provider serverUser={user}>{children}</Provider>
-        </ContextProvider>
+        <Provider serverUser={user}>{children}</Provider>
       </body>
     </html>
   );

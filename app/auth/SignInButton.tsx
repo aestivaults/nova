@@ -3,7 +3,6 @@ import { useSetParams } from "@/app/hooks/useSetParams";
 import Button from "@/app/components/ui/button";
 import { useState } from "react";
 import Image from "next/image";
-import { useAppKit } from "@reown/appkit/react";
 
 export default function SignInButton() {
   const [loading, setLoading] = useState(false);
@@ -21,7 +20,6 @@ export default function SignInButton() {
     }
   };
 
-  const { open } = useAppKit();
   return (
     <div className="flex flex-col items-center gap-4">
       <Button
@@ -40,28 +38,6 @@ export default function SignInButton() {
           width={24}
         />
         {loading ? "Signing in..." : <span>Continue with Google</span>}
-      </Button>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-white/10"></div>
-        </div>
-      </div>
-      <Button
-        variant="secondary"
-        type="submit"
-        size="medium"
-        fullWidth
-        onClick={() => open()}
-        disabled={loading}
-        className="flex items-center justify-center gap-2"
-      >
-        <Image
-          src="https://api.iconify.design/mdi/wallet.svg"
-          alt="Wallet icon"
-          height={24}
-          width={24}
-        />
-        {loading ? "Signing in..." : <span>Continue with Wallet</span>}
       </Button>
     </div>
   );

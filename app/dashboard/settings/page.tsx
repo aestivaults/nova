@@ -1,5 +1,4 @@
 "use client";
-import Wallet from "./Wallet";
 import ProfileSettings from "./profilesettings";
 import Security from "./security";
 
@@ -9,7 +8,6 @@ export default function Home() {
       <div className="container space-y-20">
         <ProfileSettings />
         <Security />
-        <Wallet />
       </div>
     </div>
   );

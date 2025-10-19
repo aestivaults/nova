@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import Button from "../components/ui/button";
 import NavTabs from "../components/ui/Tabs";
-import { ActionButtonList } from "../components/WalletConnectKit/ActionButtonList";
 import { createServerApi } from "../utils/api";
 import { formatEthPrice } from "../utils/formatters";
 import DashboardWrapper from "./Dashboard";
@@ -105,8 +104,6 @@ export default async function CustomerDashboard() {
                     Edit Profile
                   </Button>
                 </Link>
-
-                {!user?.owner_id && <ActionButtonList />}
               </div>
             </div>
 
