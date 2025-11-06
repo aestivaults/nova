@@ -57,7 +57,7 @@ export default function CollectionCard({
           </div>
 
           <div>
-            <h3 className="font-medium text-sm line-clamp-1">
+            <h3 className="font-medium text-xs  md:text-sm line-clamp-1">
               {collection.name}
             </h3>
             <div className="text-xs text-light/60">
@@ -88,7 +88,7 @@ export default function CollectionCard({
 
             <div className="absolute inset-0 bg-gradient-to-t from-dark to-transparent"></div>
 
-            <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col md:flex-row md:items-end">
+            <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-row-reverse md:flex-row md:items-center">
               <div className="flex items-center mb-4 md:mb-0 md:mr-6">
                 <div className="w-20 relative h-20 rounded-xl overflow-hidden border-4 border-darker shadow-lg">
                   <Image
@@ -126,13 +126,13 @@ export default function CollectionCard({
                 )}
 
                 {collection.description && (
-                  <p className="text-light/70 mb-4 max-w-2xl line-clamp-2 md:line-clamp-1">
+                  <p className="text-light/70 text-xs md:text-sm mb-4 max-w-2xl line-clamp-2 md:line-clamp-1">
                     {collection.description}
                   </p>
                 )}
               </div>
 
-              <div className="flex md:gap-8 gap-4">
+              <div className=" hidden md:flex  md:gap-8 gap-4">
                 {collection.nfts.length !== undefined && (
                   <div className="text-center">
                     <p className="text-xl font-bold">
@@ -159,7 +159,7 @@ export default function CollectionCard({
             </div>
 
             {collection.featured && (
-              <div className="absolute top-4 left-4 bg-primary-500 text-light text-xs py-1 px-2 rounded-full">
+              <div className="absolute top-1 left-1 md:top-4 md:left-4 bg-primary-500 text-light text-xs py-1 px-2 rounded-full">
                 Featured
               </div>
             )}
@@ -238,7 +238,7 @@ export default function CollectionCard({
           </p>
         )}
 
-        <div className="grid grid-cols-3 gap-2 mb-4">
+        <div className="hidden  sm:grid grid-cols-3 gap-2 mb-4">
           {collection.nfts.length !== undefined && (
             <div className="text-center bg-light/5 rounded-lg p-2">
               <p className="text-xs text-light/60">Items</p>
@@ -269,7 +269,7 @@ export default function CollectionCard({
         </div>
 
         <div className="flex justify-end">
-          <Button type="button" variant="primary" size="small">
+          <Button type="button" variant="primary">
             View Collection
           </Button>
         </div>

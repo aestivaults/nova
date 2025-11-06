@@ -1,12 +1,14 @@
 "use client";
 
 import Button from "@/app/components/ui/button";
-import { useAuth } from "@/app/context/AuthContext";
 import { useSetParams } from "@/app/hooks/useSetParams";
 import { balanceHistory } from "@/app/types/general";
+import { User } from "@/app/types/user";
+import { api } from "@/app/utils/api";
 import { formatCurrency, formatNumber } from "@/app/utils/formatters";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowUp, Loader } from "lucide-react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import WalletChart from "./WalletChart";
 
 export default function WalletOverview({
@@ -16,11 +18,22 @@ export default function WalletOverview({
   ethereumvalue: number;
   balanceHistory: balanceHistory[];
 }) {
-  const { user } = useAuth();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
   const { setParams } = useSetParams();
   const handleTabChange = (tab: string) => {
     setParams({ tab: tab });
   };
+
+  useEffect(() => {
+    async function getUser() {
+      setLoading(true);
+      const { data } = await api.get("/users");
+      setUser(data.data);
+      setLoading(false);
+    }
+    getUser();
+  }, []);
 
   return (
     <div className="glass-card p-6 mb-8">
@@ -45,48 +58,42 @@ export default function WalletOverview({
                   />
                   <div>
                     <p className="font-medium">Total Balance</p>
-                    <p className="text-sm text-white/60">Vault + Wallet</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-xl font-bold">
-                    {formatNumber(user?.walletBalance || 0)} ETH
-                  </p>
-                  <p className="text-sm text-white/60">
-                    {formatCurrency(
-                      (user?.walletBalance || 0) * ethereumvalue,
-                      "USD"
-                    )}
-                  </p>
+                  {loading ? (
+                    <Loader className="animate-spin" />
+                  ) : (
+                    <p className="text-xl font-bold">
+                      {formatNumber(user?.walletBalance || 0)} ETH
+                    </p>
+                  )}
                 </div>
               </div>
 
               {/* Deposited Balance */}
               <div className="flex justify-between items-center border-t border-white/10 pt-4">
                 <div>
-                  <p className="font-medium">Deposited Balance</p>
-                  <p className="text-sm text-white/60">On-platform (Vault)</p>
+                  <p className="font-medium">Dollar Estimate</p>
+                  <p className="text-sm text-white/60">
+                    On-platform (rates may vary)
+                  </p>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold">
-                    {formatNumber(user?.walletBalance || 0)} ETH
-                  </p>
-                  <p className="text-sm text-white/60">
-                    {formatCurrency(
-                      (user?.walletBalance || 0) * ethereumvalue,
-                      "USD"
-                    )}
-                  </p>
+                  {loading ? (
+                    <Loader className="animate-spin" />
+                  ) : (
+                    <p className="text-xl font-bold">
+                      {formatCurrency(
+                        (user?.walletBalance || 0) * ethereumvalue,
+                        "USD"
+                      )}
+                    </p>
+                  )}
                 </div>
               </div>
 
               {/* Wallet Balance */}
-              <div className="flex justify-between items-center border-t border-white/10 pt-4">
-                <div>
-                  <p className="font-medium">Wallet Balance</p>
-                  <p className="text-sm text-white/60">Connected Wallet</p>
-                </div>
-              </div>
             </div>
           </div>
 

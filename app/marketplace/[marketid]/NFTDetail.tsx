@@ -29,7 +29,7 @@ export default function NFTDetail({ nft }: { nft: NftPayload }) {
     <div className="glass-card p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Media */}
-        <div className="rounded-lg relative overflow-hidden">
+        <div className="rounded-lg min-h-[400px] relative overflow-hidden">
           {nft.media_type === "video" ? (
             <video
               src={nft.media_url}
@@ -80,15 +80,16 @@ export default function NFTDetail({ nft }: { nft: NftPayload }) {
             <div>
               <p className="text-light/60 text-sm">Creator</p>
               <div className="flex items-center mt-1">
-                <Image
-                  height={25}
-                  width={30}
-                  src={nft.creator.avatar || "/pfp.png"}
-                  alt={nft.creator.name}
-                  className="rounded-full object-cover mr-2"
-                />
+                <div className="relative aspect-square mr-2 h-full w-full">
+                  <Image
+                    fill
+                    src={nft.creator.avatar || "/pfp.png"}
+                    alt={nft.creator.name}
+                    className="rounded-full object-cover"
+                  />
+                </div>
 
-                <span>{nft.creator.name}</span>
+                <span className="text-xs md:text-sm">{nft.creator.name}</span>
               </div>
             </div>
 
@@ -96,24 +97,16 @@ export default function NFTDetail({ nft }: { nft: NftPayload }) {
               <div>
                 <p className="text-light/60 text-sm">Owner</p>
                 <div className="flex items-center mt-1">
-                  <Image
-                    height={25}
-                    width={30}
-                    src={nft.owner.avatar}
-                    alt={nft.owner.name}
-                    className="rounded-full mr-2"
-                  />
+                  <div className="relative aspect-square mr-2 h-full w-full">
+                    <Image
+                      fill
+                      src={nft.owner.avatar}
+                      alt={nft.owner.name}
+                      className="rounded-full"
+                    />
+                  </div>
 
-                  <span>{nft.owner.name}</span>
-                </div>
-              </div>
-            )}
-
-            {nft.owning_collection && (
-              <div>
-                <p className="text-light/60 text-sm">Collection</p>
-                <div className="flex items-center mt-1">
-                  <span>{nft.owning_collection.name}</span>
+                  <span className="text-xs md:text-sm">{nft.owner.name}</span>
                 </div>
               </div>
             )}

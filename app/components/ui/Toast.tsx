@@ -49,7 +49,7 @@ export function Toast({
 
   // Position classes
   const positionClasses = {
-    "top-right": "top-4 right-4",
+    "top-right": "top-2 right-2 md:top-4 md:right-4",
     "top-left": "top-4 left-4",
     "bottom-right": "bottom-4 right-4",
     "bottom-left": "bottom-4 left-4",
@@ -103,7 +103,7 @@ export function Toast({
   return (
     <div
       className={`
-        fixed z-50 max-w-sm w-full
+        fixed z-50 max-w-screen md:max-w-sm md:w-full
         ${positionClasses[position]} 
         transform transition-all duration-300 ease-out
         ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}
@@ -114,7 +114,7 @@ export function Toast({
           <div className="flex items-start">
             {/* Icon */}
             <div
-              className={`flex-shrink-0 w-8 h-8 rounded-full ${getBgColor()} flex items-center justify-center mr-3`}
+              className={`flex-shrink-0 w-8 h-8 rounded-full border-white border ${getBgColor()} flex items-center justify-center mr-3`}
             >
               {getTypeIcon()}
             </div>
@@ -122,7 +122,7 @@ export function Toast({
             {/* Content */}
             <div className="flex-1">
               {title && <h4 className="font-medium mb-1">{title}</h4>}
-              <p className="text-sm text-white/80">{message}</p>
+              <p className=" text-xs md:text-sm text-white/80">{message}</p>
             </div>
 
             {/* Close button */}

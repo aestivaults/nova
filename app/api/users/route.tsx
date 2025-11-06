@@ -16,7 +16,9 @@ export async function GET(req: NextRequest) {
   }
   try {
     await dbConnect();
-    const serverUser = await User.findById(decoded._id).lean();
+    const serverUser = await User.findById(decoded._id)
+      .select("-password -refresh_token -login_type")
+      .lean();
 
     return NextResponse.json(
       {

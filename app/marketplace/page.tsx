@@ -1,12 +1,11 @@
 import Footer from "@/app/components/layout/Footer";
 import Navbar from "@/app/components/layout/navbar";
 import { NFTGridSkeleton } from "@/app/components/ui/Loader";
+import Pagination from "../components/ui/Pagination";
+import { getNfts } from "../lib/getnfts";
 import Hero from "./Hero";
 import MarketFilterList from "./MarketFilter";
 import MarketGrid from "./MarketGrid";
-import { getNfts } from "../lib/getnfts";
-import Pagination from "../components/ui/Pagination";
-import { Suspense } from "react";
 
 export default async function Market({
   searchParams,

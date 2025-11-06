@@ -39,7 +39,7 @@ export default function FeaturedNFTs({
       <div className="container">
         <h2 className="text-2xl font-bold mb-6">Featured NFTs</h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6">
           {filteredNfts.slice(0, 16).map((nft) => (
             <NFTCard
               key={nft._id}

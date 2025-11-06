@@ -7,6 +7,7 @@ import "./styles/animations.css";
 import "./styles/components.css";
 import "./styles/globals.css";
 import { User } from "./types/user";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "AureusNova",
@@ -31,6 +32,23 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <Provider serverUser={user}>{children}</Provider>
+        <Script
+          id="smartsupp-script"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              var _smartsupp = _smartsupp || {};
+              _smartsupp.key = '2d763a84b71acbe161e4fbfc5a8af11bb399baf9';
+              window.smartsupp||(function(d) {
+                var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+                s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+                c.type='text/javascript';c.charset='utf-8';c.async=true;
+                c.src='https://www.smartsuppchat.com/loader.js?';
+                s.parentNode.insertBefore(c,s);
+              })(document);
+            `,
+          }}
+        />
       </body>
     </html>
   );

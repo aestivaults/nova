@@ -4,7 +4,7 @@ import { generateWalletAddress } from "@/app/backend/jwt/create_ids";
 import Button from "@/app/components/ui/button";
 import { useAuth } from "@/app/context/AuthContext";
 import { useNotifications } from "@/app/context/NotificationProvider";
-import { transactions } from "@/app/data/wallet";
+import { TransactionProps } from "@/app/types/transactions";
 import { api } from "@/app/utils/api";
 import {
   formatCurrency,
@@ -13,9 +13,14 @@ import {
   truncateAddress,
 } from "@/app/utils/formatters";
 import { AxiosError } from "axios";
-import { ChevronRight, QrCode, TriangleAlert, Wallet } from "lucide-react";
-import React, { useState } from "react";
-import { number } from "zod";
+import {
+  ChevronRight,
+  QrCode,
+  SearchX,
+  TriangleAlert,
+  Wallet,
+} from "lucide-react";
+import React, { useEffect, useState } from "react";
 
 type WithdrawForm = {
   amount: number;
@@ -93,6 +98,22 @@ export default function Withdraw() {
       setIsLoading(false);
     }
   };
+
+  const [transaction, setTransaction] = useState<TransactionProps[]>([]);
+  useEffect(() => {
+    async function getPastWithdrawals() {
+      const { data } = await api.get("/users/transactions");
+      const response = data.data as TransactionProps[];
+
+      const pastWithdrawals = response.filter(
+        (item) => item.type.toLowerCase() === "withdrawal"
+      );
+
+      setTransaction(pastWithdrawals);
+    }
+
+    getPastWithdrawals();
+  }, [isloading]);
 
   return (
     <div className="glass-card p-6">
@@ -225,15 +246,13 @@ export default function Withdraw() {
           {/* Recent Withdrawals */}
           <div className="glass-card p-4 mb-6">
             <h3 className="font-medium mb-4">Recent Withdrawals</h3>
-            {transactions
-              .filter((tx) => tx.type === "outgoing")
-              .slice(0, 3)
-              .map((tx) => (
+            {transaction.length > 0 ? (
+              transaction?.map((tx) => (
                 <div
-                  key={tx.id}
+                  key={tx._id}
                   className="flex items-center justify-between p-2 hover:bg-white/5 rounded-lg cursor-pointer mb-2"
                   onClick={() =>
-                    setTxForm((prev) => ({ ...prev, address: tx.to }))
+                    setTxForm((prev) => ({ ...prev, toAddress: tx.toAddress }))
                   }
                 >
                   <div className="flex items-center">
@@ -242,10 +261,10 @@ export default function Withdraw() {
                     </div>
                     <div>
                       <div className="font-mono text-sm truncate max-w-[150px]">
-                        {truncateAddress(tx.to)}
+                        {truncateAddress(tx.toAddress)}
                       </div>
                       <div className="text-xs text-white/60">
-                        {formatRelativeTime(tx.timestamp)}
+                        {formatRelativeTime(tx.createdAt)}
                       </div>
                     </div>
                   </div>
@@ -253,7 +272,13 @@ export default function Withdraw() {
                     <ChevronRight />
                   </div>
                 </div>
-              ))}
+              ))
+            ) : (
+              <div className="p-6 text-center bg-white/5 rounded-2xl">
+                <SearchX className="text-primary-500 mx-auto mb-4" />
+                <h2>You havent made any withdrawals</h2>
+              </div>
+            )}
           </div>
 
           {/* QR Code Scanner */}

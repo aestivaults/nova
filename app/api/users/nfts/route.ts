@@ -18,9 +18,16 @@ export async function GET(req: NextRequest) {
   try {
     await dbConnect();
 
-    const ownernfts = await NFT.find({ owner: decoded._id }).lean<
-      NftPayload[]
-    >();
+    const ownernfts = await NFT.find({ owner: decoded._id })
+      .populate({
+        path: "owner",
+        select: "_id name avatar",
+      })
+      .populate({
+        path: "creator",
+        select: "_id name avatar",
+      })
+      .lean<NftPayload[]>();
 
     const nftIds = ownernfts.map((n) => n._id);
 

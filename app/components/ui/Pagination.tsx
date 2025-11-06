@@ -2,6 +2,7 @@
 import { useSetParams } from "@/app/hooks/useSetParams";
 import { useRouter } from "next/navigation";
 import React from "react";
+import Button from "./button";
 
 const Pagination = ({
   pagination,
@@ -69,16 +70,14 @@ const Pagination = ({
 
       {/* Page Numbers */}
       {getPageNumbers().map((pageNumber) => (
-        <button
+        <Button
           key={pageNumber}
-          className={`btn ${
-            pageNumber === page ? "btn-primary" : "btn-secondary"
-          }`}
+          variant={pageNumber === page ? "primary" : "secondary"}
           onClick={() => handlePageChange(pageNumber)}
           aria-current={pageNumber === page ? "page" : undefined}
         >
           {pageNumber}
-        </button>
+        </Button>
       ))}
 
       {/* Next Button */}

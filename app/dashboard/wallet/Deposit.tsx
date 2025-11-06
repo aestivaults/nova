@@ -57,8 +57,6 @@ export default function Deposit() {
     }
   };
 
-  const [ethAmount, setEthAmount] = useState("");
-
   return (
     <div className="glass-card p-6">
       <h2 className="text-xl font-bold mb-6">Deposit ETH</h2>
@@ -137,20 +135,6 @@ export default function Deposit() {
           <p className="text-sm text-white/60 text-center mb-4">
             Scan this QR code to deposit ETH
           </p>
-
-          <div className="glass-card p-4 mt-8">
-            <h3 className="font-semibold mb-2">Deposit Directly from Wallet</h3>
-            <input
-              type="number"
-              placeholder="Enter ETH amount"
-              className="form-input"
-              value={ethAmount}
-              onChange={(e) => setEthAmount(e.target.value)}
-            />
-            <Button isLoading={isLoading.wallet} fullWidth className="mt-2">
-              Deposit from Wallet
-            </Button>
-          </div>
         </div>
       </div>
     </div>

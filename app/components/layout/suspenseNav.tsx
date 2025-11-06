@@ -266,7 +266,6 @@ export default function SuspenseNav() {
                     })
                   }
                   variant="secondary"
-                  size="small"
                 >
                   Login
                 </Button>
@@ -277,7 +276,6 @@ export default function SuspenseNav() {
                     })
                   }
                   variant="primary"
-                  size="small"
                 >
                   Sign Up
                 </Button>

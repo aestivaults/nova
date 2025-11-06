@@ -25,7 +25,7 @@ export default function Button({
   ...props
 }: buttonprops) {
   const sizeClasses = {
-    small: "text-xs py-1.5 px-3",
+    small: "text-xs py-1 md:py-1.5 px-1.5 md:px-3",
     medium: "text-sm py-2 px-4",
     large: "text-base py-3 px-6",
   };

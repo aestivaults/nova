@@ -51,10 +51,10 @@ export default function Slider<T>({
   const breakpoints = useMemo(
     () => ({
       0: {
-        slidesPerView: Math.max(1, slidesToShow - 3),
+        slidesPerView: 2,
       },
       640: {
-        slidesPerView: Math.max(1, slidesToShow - 1),
+        slidesPerView: 3,
       },
       1024: {
         slidesPerView: slidesToShow,

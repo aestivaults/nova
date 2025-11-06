@@ -1,21 +1,28 @@
 "use client";
+import { generateNftTokenId } from "@/app/backend/jwt/create_ids";
 import Button from "@/app/components/ui/button";
+import { useAuth } from "@/app/context/AuthContext";
+import { useNotifications } from "@/app/context/NotificationProvider";
+import { retryUploadImage } from "@/app/lib/uploadImages";
 import { CollectionPayload } from "@/app/types/collection";
+import { NftInput } from "@/app/types/nftTypes";
+import { api } from "@/app/utils/api";
 import { motion } from "framer-motion";
 import { CloudUpload, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useRef, useState } from "react";
-import { useFormStatus } from "react-dom";
 export default function MintForm({
   collections,
 }: {
   collections: CollectionPayload[];
 }) {
   const [isAuction, setIsAuction] = useState(false);
+  const { toast } = useNotifications();
+  const { user } = useAuth();
   const [media_type, setmedia_type] = useState<"image" | "video" | null>(null); // "image" or "video"
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { pending } = useFormStatus();
+  const [pending, setPending] = useState(false);
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
   const router = useRouter();
 
@@ -73,13 +80,84 @@ export default function MintForm({
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formdata);
+    const formData = new FormData(e.currentTarget);
+    const nft = formData.get("nft_image") as File;
+    if (!nft || !nft.size) {
+      toast(
+        "error",
+        "system",
+        "Invalid Image",
+        "Please Add image to be minted",
+        5000
+      );
+      return;
+    }
+
     try {
-    } catch (error) {}
+      setPending(true);
+      const [nftres] = await Promise.allSettled([
+        retryUploadImage(nft, "nfts"),
+      ]);
+
+      if (nftres.status === "rejected") {
+        toast("error", "system", "Mint Failed", "Please Try Again", 5000);
+        return;
+      }
+
+      const payload: NftInput = {
+        title: formData.get("name") as string,
+        description: formData.get("description") as string,
+        owning_collection: formData.get("collection") as string,
+        creator: user?._id || "",
+        owner: user?._id || "",
+        token_id: generateNftTokenId(),
+        type: formData.get("auctionEndTime") ? "auction" : "sale",
+        price: Number(formData.get("price")),
+        likes_count: 0,
+        media_type: "image",
+        media_url: nftres.value,
+        current_bid: 0,
+        metadata: {
+          contract: "0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85",
+          blockchain: "Ethereum",
+          tokenStandard: "ERC-721",
+        },
+      };
+      const auctionEndTime = formData.get("auctionEndTime") as string;
+      if (auctionEndTime) {
+        const [year, month, day] = auctionEndTime.split("-").map(Number);
+        const date = new Date(Date.UTC(year, month - 1, day));
+        const isoString = date.toISOString().replace("Z", "+00:00");
+
+        payload.auctionEndTime = isoString;
+        payload.current_bid = Number(formData.get("price"));
+      }
+
+      const res = await api.post("/nfts", payload);
+      if (res.data.error) {
+        toast("error", "system", "Mint Failed", "Please Try Again", 5000);
+        return;
+      }
+      if (res.data.data) {
+        toast(
+          "success",
+          "system",
+          "Mint Successful!",
+          "NFT Created Successfully!",
+          5000
+        );
+        router.push("/dashboard?tab=owned");
+      }
+    } catch (error) {
+      console.error("something went wrong", error);
+      toast("error", "system", "Error!", "Something Went wrong", 5000);
+    } finally {
+      setPending(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="p-4 md:p-8" onSubmit={handleSubmit}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <div className="mb-6">

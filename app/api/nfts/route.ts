@@ -200,6 +200,19 @@ export async function POST(request: NextRequest) {
       );
     }
     await dbConnect();
+    const user = await User.findById(result.data.creator).exec();
+
+    if (user.walletBalance < 0.15) {
+      return NextResponse.json(
+        {
+          data: null,
+          error: "Insufficient Balance",
+          message: "Your Balance is not sufficient for this Mint",
+        },
+        { status: 400 }
+      );
+    }
+
     const newnft = await NFT.insertOne(result.data);
 
     const collection = await Collection.findById(result.data.owning_collection);

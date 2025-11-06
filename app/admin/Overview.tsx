@@ -16,6 +16,7 @@ import {
 import { reportedItems } from "./admindata";
 import Link from "next/link";
 import { TransactionProps } from "../types/transactions";
+import Image from "next/image";
 
 export default function Overview({
   users,
@@ -42,11 +43,12 @@ export default function Overview({
         <div className="divide-y divide-white/10">
           {users.map((user) => (
             <div key={user._id} className="p-4 flex items-center">
-              <div className="mr-4">
-                <img
-                  src={user.avatar}
+              <div className="mr-4 relative w-10 h-10 rounded-full overflow-hidden">
+                <Image
+                  src={user.avatar || "/pfp.png"}
                   alt={user.username}
-                  className="w-10 h-10 rounded-full"
+                  fill
+                  className="object-cover"
                 />
               </div>
 

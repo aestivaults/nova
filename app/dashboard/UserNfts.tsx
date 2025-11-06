@@ -1,4 +1,4 @@
-import { Filter, Images } from "lucide-react";
+import { Images } from "lucide-react";
 import Link from "next/link";
 import Button from "../components/ui/button";
 import NFTCard from "../components/ui/NFTCard";
@@ -15,20 +15,14 @@ export default function UserNFTS({
         <h2 className="text-xl font-bold">My NFTs</h2>
 
         <div className="flex gap-3">
-          <Button variant="secondary" size="small" icon={<Filter />}>
-            Filter
-          </Button>
-
           <Link href="/marketplace">
-            <Button variant="primary" size="small">
-              Browse Marketplace
-            </Button>
+            <Button variant="primary">Browse Marketplace</Button>
           </Link>
         </div>
       </div>
 
       {ownedNFTs && ownedNFTs.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6">
           {ownedNFTs.map((nft) => (
             <NFTCard key={nft._id} nft={nft} />
           ))}

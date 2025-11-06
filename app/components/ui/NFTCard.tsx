@@ -158,11 +158,11 @@ export default function NFTCard({
         {variant !== "compact" && (
           <div className="absolute top-3 left-3">
             {isAuction ? (
-              <span className="badge badge-secondary text-xs">
+              <span className="badge p-1 badge-secondary text-xs">
                 <Gavel className="mr-1" /> Live Auctions
               </span>
             ) : (
-              <span className="badge badge-primary text-xs">
+              <span className="badge p-1 badge-primary text-xs">
                 <Tag className="mr-1" /> Buy Now
               </span>
             )}
@@ -194,10 +194,10 @@ export default function NFTCard({
         </div>
         {/* Time left for auctions */}
         {isAuction && variant !== "compact" && (
-          <div className="absolute bottom-3 left-3 right-3 bg-dark/70 backdrop-blur-sm rounded-lg p-2 text-xs font-medium">
+          <div className="absolute bottom-3 left-3 right-3 bg-dark/70 backdrop-blur-sm rounded-lg p-1 md:p-2 text-xs font-medium">
             <div className="flex justify-between items-center">
               <span>Time Left:</span>
-              <span className="text-primary-300 f">
+              <span className="text-primary-300">
                 {formatTimeRemaining(nft.auctionEndTime ?? "")}
               </span>
             </div>
@@ -205,20 +205,20 @@ export default function NFTCard({
         )}
       </div>
 
-      <div className="metadata">
+      <div className="metadata md:p-4 p-2">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-base font-bold truncate">{nft.title}</h3>
 
           {variant !== "compact" && (
-            <span className="text-xs bg-primary-900/50 rounded-full px-2 py-0.5">
+            <span className="text-xs  hidden sm:block bg-primary-900/50 rounded-full px-2 py-0.5">
               #{truncateAddress(nft.token_id)}
             </span>
           )}
         </div>
 
         {variant !== "compact" && (
-          <div className="mb-3">
-            <div className="creator flex items-center space-x-2">
+          <div className="mb-1 md:mb-3">
+            <div className="creator flex items-center md:space-x-2">
               <div className="relative w-5 h-5">
                 <Image
                   fill
@@ -249,7 +249,7 @@ export default function NFTCard({
             </div>
 
             {variant !== "compact" && (
-              <div className="text-right">
+              <div className="text-right hidden sm:block">
                 <p className="text-xs text-light/70 mb-0.5">{"likes"}</p>
                 <p className="text-sm font-medium">
                   {formatNumber(likesCount)}
@@ -259,15 +259,16 @@ export default function NFTCard({
           </div>
 
           {variant !== "compact" && (
-            <div className="flex space-x-2">
+            <div className="flex md:flex-row flex-col gap-2 space-x-2">
               {isAuction ? (
                 <Button
                   variant="primary"
                   size="small"
                   fullWidth
                   onClick={handleBid}
+                  icon={<Gavel />}
                 >
-                  <Gavel className="mr-1" /> place Bid
+                  place Bid
                 </Button>
               ) : (
                 <Button
@@ -280,10 +281,18 @@ export default function NFTCard({
                 </Button>
               )}
 
-              <Button variant="secondary" size="small">
-                <Eye />
-              </Button>
+              <div className="w-full hidden sm:block ">
+                <Button variant="secondary" fullWidth size="small">
+                  <Eye />
+                </Button>
+              </div>
             </div>
+          )}
+
+          {variant === "compact" && (
+            <Button variant="secondary" fullWidth size="small">
+              View <Eye />
+            </Button>
           )}
         </div>
       </div>

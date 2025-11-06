@@ -17,7 +17,7 @@ export const getTransactionIcon = (type: string) => {
 export // Get transaction status badge
 const getStatusBadge = (status: string) => {
   switch (status) {
-    case "completed":
+    case "approved":
       return (
         <span className="px-2 py-1 rounded-full text-xs bg-green-900/30 text-green-400">
           Completed
@@ -30,6 +30,12 @@ const getStatusBadge = (status: string) => {
         </span>
       );
     case "failed":
+      return (
+        <span className="px-2 py-1 rounded-full text-xs bg-red-900/30 text-red-400">
+          Failed
+        </span>
+      );
+    case "rejected":
       return (
         <span className="px-2 py-1 rounded-full text-xs bg-red-900/30 text-red-400">
           Failed

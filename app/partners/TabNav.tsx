@@ -9,6 +9,7 @@ export default function TabNav() {
 
   const renderTab = (label: string, value: string) => (
     <Button
+      key={value}
       variant={activeTab === value ? "primary" : "secondary"}
       onClick={() => setParams({ tab: value })}
     >

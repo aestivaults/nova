@@ -6,7 +6,8 @@
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  transition: transform var(--transition-medium),
+  transition:
+    transform var(--transition-medium),
     box-shadow var(--transition-medium);
 }
 
@@ -47,7 +48,6 @@
 }
 
 .nft-card .metadata {
-  padding: 1rem;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -67,13 +67,6 @@
   margin-top: 0.5rem;
 }
 
-.nft-card .creator img {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
 .nft-card .actions {
   position: absolute;
   top: 1rem;
@@ -82,7 +75,9 @@
   gap: 0.5rem;
   opacity: 0;
   transform: translateY(-10px);
-  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .nft-card:hover .actions {
@@ -95,7 +90,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1.5rem;
   border-radius: 8px;
 
   font-weight: 600;
@@ -155,7 +149,8 @@
   right: 0;
   z-index: 49;
   padding: 1rem 0;
-  transition: background-color var(--transition-medium),
+  transition:
+    background-color var(--transition-medium),
     padding var(--transition-medium);
 }
 
@@ -256,7 +251,8 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   color: var(--light);
-  transition: border-color var(--transition-fast),
+  transition:
+    border-color var(--transition-fast),
     box-shadow var(--transition-fast);
 }
 .form-checkbox {
@@ -296,7 +292,8 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   color: var(--light);
-  transition: border-color var(--transition-fast),
+  transition:
+    border-color var(--transition-fast),
     box-shadow var(--transition-fast);
 }
 
@@ -372,7 +369,8 @@
   justify-content: center;
   opacity: 0;
   visibility: hidden;
-  transition: opacity var(--transition-medium),
+  transition:
+    opacity var(--transition-medium),
     visibility var(--transition-medium);
 }
 
@@ -502,9 +500,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.25rem 0.4rem;
   border-radius: 20px;
-  font-size: 0.75rem;
   font-weight: 600;
   line-height: 1;
 }
