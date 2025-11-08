@@ -1,15 +1,8 @@
 "use client";
 
 import { useSetParams } from "@/app/hooks/useSetParams";
-import { Bid } from "@/app/types/bids";
 
-export default function Tabs({
-  type,
-  filteredBids,
-}: {
-  type: "admin" | "user" | "owner";
-  filteredBids: Bid[];
-}) {
+export default function Tabs({ type }: { type: "admin" | "user" | "owner" }) {
   const { setParams, searchParams } = useSetParams();
   const activeTab = searchParams.get("current") || "active";
 
@@ -17,6 +10,7 @@ export default function Tabs({
     if (type === "user") {
       return [
         { id: "active", label: "Active Bids" },
+        { id: "won", label: "Won Bids" },
         { id: "outbid", label: "Outbid" },
         { id: "history", label: "History" },
       ];
@@ -47,11 +41,6 @@ export default function Tabs({
           onClick={() => handleTabChange(tab.id)}
         >
           {tab.label}
-          {tab.id === "suspicious" && filteredBids.length > 0 && (
-            <span className="ml-2 px-2 py-0.5 bg-red-500 text-white text-xs rounded-full">
-              {filteredBids.length}
-            </span>
-          )}
         </button>
       ))}
     </div>

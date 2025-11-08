@@ -3,6 +3,8 @@ import { z } from "zod";
 export const buynftSchema = z.object({
   user_id: z.string(),
   nft_id: z.string(),
+  former_collectionID: z.string(),
+  owning_collection: z.string(),
 });
 
 export const nftInputSchema = z.object({

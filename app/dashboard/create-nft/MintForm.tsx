@@ -134,6 +134,7 @@ export default function MintForm({
       }
 
       const res = await api.post("/nfts", payload);
+      console.log(res);
       if (res.data.error) {
         toast("error", "system", "Mint Failed", "Please Try Again", 5000);
         return;
@@ -150,6 +151,7 @@ export default function MintForm({
       }
     } catch (error) {
       console.error("something went wrong", error);
+      console.log(error);
       toast("error", "system", "Error!", "Something Went wrong", 5000);
     } finally {
       setPending(false);

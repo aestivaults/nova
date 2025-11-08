@@ -1,18 +1,11 @@
 // Notification Context for global notifications system
 "use client";
 
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { createContext, ReactNode, useContext, useMemo } from "react";
 import { NotificationInput, NotificationPayload } from "../types/notification";
-import { useAuth } from "./AuthContext";
 import { api } from "../utils/api";
-import { AxiosError } from "axios";
+import { useAuth } from "./AuthContext";
 
 interface NotificationContextType {
   notifications: NotificationPayload[];
@@ -39,30 +32,19 @@ export default function NotificationProvider({
   children: ReactNode;
 }) {
   const { user } = useAuth();
-  const [notifications, setNotifications] = useState<NotificationPayload[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      if (user)
-        try {
-          const res = await api.get("/notifications");
-
-          if (!res.data.data) {
-            setNotifications([]);
-            return;
-          }
-
-          setNotifications(res.data.data);
-        } catch (error) {
-          console.error("Failed to fetch notifications", error);
-        } finally {
-          setIsLoading(false);
-        }
-    };
-
-    fetchNotifications();
-  }, [user]);
+  const { data: notifications = [], isLoading } = useQuery<
+    NotificationPayload[],
+    Error
+  >({
+    queryKey: ["notifications", user?._id], // ← unique per user
+    queryFn: () => getNotifications(), // ← fetch all for user
+    enabled: !!user, // ← ONLY run when user exists
+    staleTime: 1000 * 60, // 1 min
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+  });
 
   // Count unread notifications
   const unreadCount = useMemo(() => {
@@ -71,12 +53,12 @@ export default function NotificationProvider({
 
   const markAsRead = async (notificationId: string) => {
     try {
-      setNotifications((prev) =>
-        prev.map((notification) =>
-          notification._id === notificationId
-            ? { ...notification, isRead: true }
-            : notification
-        )
+      queryClient.setQueryData<NotificationPayload[]>(
+        ["notifications", user?._id],
+        (old = []) =>
+          old.map((n) =>
+            n._id === notificationId ? { ...n, isRead: true } : n
+          )
       );
 
       await api.patch("/notifications", {
@@ -85,13 +67,9 @@ export default function NotificationProvider({
       });
     } catch (error) {
       console.log("something went wrong", error);
-      setNotifications((prev) =>
-        prev.map((notification) =>
-          notification._id === notificationId
-            ? { ...notification, isRead: false }
-            : notification
-        )
-      );
+      queryClient.invalidateQueries({
+        queryKey: ["notifications", user?._id],
+      });
     }
   };
 
@@ -99,7 +77,10 @@ export default function NotificationProvider({
   const markAllAsRead = async () => {
     try {
       await api.get("/notifications/markAllRead");
-      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+      queryClient.setQueryData<NotificationPayload[]>(
+        ["notifications", user?._id],
+        (old = []) => old.map((n) => ({ ...n, isRead: true }))
+      );
     } catch (error) {
       console.error("Failed to mark all as read:", error);
     }
@@ -107,47 +88,55 @@ export default function NotificationProvider({
 
   // Delete a notification
   const deleteNotification = async (notificationId: string) => {
-    const notification = notifications.find(
-      (item) => item._id === notificationId
-    );
-
     try {
-      setNotifications((prev) =>
-        prev.filter((notification) => notification._id !== notificationId)
+      queryClient.setQueryData<NotificationPayload[]>(
+        ["notifications", user?._id],
+        (old = []) =>
+          old.filter((n) =>
+            n._id !== notificationId ? { ...n, isRead: true } : n
+          )
       );
 
       await api.delete(`/notifications?_id=${notificationId}`);
     } catch (error) {
       console.log("something went wrong", error);
-      if (notification) setNotifications((prev) => [notification, ...prev]);
+      queryClient.invalidateQueries({
+        queryKey: ["notifications", user?._id],
+      });
     }
   };
 
   // Add a new notification
-  const addNotification = async (notification: NotificationInput) => {
-    if (notification.isToast) {
-      setNotifications((prev) => [
-        {
-          ...(notification as NotificationPayload),
-          _id: Date.now().toString(),
-        },
-        ...prev,
-      ]);
+  const addNotification = async (input: NotificationInput) => {
+    if (input.isToast) {
+      // Local toast
+      queryClient.setQueryData<NotificationPayload[]>(
+        ["notifications", user?._id],
+        (old) => [
+          {
+            ...(input as NotificationPayload),
+            _id: Date.now().toString(),
+          },
+          ...(old ?? []),
+        ]
+      );
       return;
     }
-    try {
-      const res = await api.post("/notifications", notification);
 
-      if (res.data) {
-        setNotifications((prev) => [res.data.data, ...prev]);
-        return;
-      }
+    try {
+      const res = await api.post("/notifications", input);
+      queryClient.setQueryData<NotificationPayload[]>(
+        ["notifications", user?._id],
+        (old) => [res.data.data, ...(old ?? [])]
+      );
     } catch (err) {
-      const error =
-        err instanceof AxiosError
-          ? err.response?.data.message
-          : "Something went wrong";
-      toast("error", "bid", "Error!", error, 7000);
+      toast(
+        "error",
+        "system",
+        "Error",
+        err instanceof Error ? err.message : "something went wrong",
+        7000
+      );
     }
   };
 
@@ -173,8 +162,9 @@ export default function NotificationProvider({
 
     // Auto-remove after duration
     setTimeout(() => {
-      setNotifications((prev) =>
-        prev.filter((notification) => notification._id !== toastId)
+      queryClient.setQueryData<NotificationPayload[]>(
+        ["notifications", user?._id],
+        (old) => old?.filter((n) => n._id !== toastId) ?? []
       );
     }, duration);
 
@@ -209,4 +199,10 @@ export function useNotifications() {
     );
   }
   return context;
+}
+
+async function getNotifications() {
+  const { data } = await api.get("/notifications");
+
+  return data.data;
 }

@@ -54,7 +54,7 @@ export default async function Bidding({
             <p className="text-white/70">
               Monitor all platform bidding activity
             </p>
-            <Tabs type={"admin"} filteredBids={filteredBids} />
+            <Tabs type={"admin"} />
           </div>
         </div>
 
@@ -80,8 +80,8 @@ export default async function Bidding({
                 {activeTab === "active"
                   ? "You don't have any active bids at the moment."
                   : activeTab === "outbid"
-                  ? "You haven't been outbid on any auctions."
-                  : "You don't have any bid history yet."}
+                    ? "You haven't been outbid on any auctions."
+                    : "You don't have any bid history yet."}
               </p>
             </div>
           )}

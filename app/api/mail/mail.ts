@@ -175,13 +175,13 @@ class AureusNovaEmailService {
         <p style="margin: 4px 0">© 2025 AureusNova. All rights reserved.</p>
         <p style="margin: 4px 0">
           <a
-            href="https://aureusNova.com/privacy"
+            href="hhttps://nova-xi-coral.vercel.app/privacy"
             style="color: #6e00ff; text-decoration: none; margin: 0 10px"
             >Privacy</a
           >
           |
           <a
-            href="https://aureusNova.com/terms"
+            href="hhttps://nova-xi-coral.vercel.app/terms"
             style="color: #6e00ff; text-decoration: none; margin: 0 10px"
             >Terms</a
           >
@@ -408,7 +408,7 @@ class AureusNovaEmailService {
         <div style="margin-top: 24px">
           <p style="font-size: 14px; line-height: 1.5; color: #4b5563;">
             Didn't request this code?
-            <a href="https://aureusnova.com/security" style="color: #e53e3e; font-weight: 600;">
+            <a href="hhttps://nova-xi-coral.vercel.app/security" style="color: #e53e3e; font-weight: 600;">
               Secure your account now
             </a>
           </p>
@@ -457,7 +457,7 @@ class AureusNovaEmailService {
     expiresIn?: number;
   }) {
     try {
-      const resetUrl = `https://app.aureusnova.com/reset-password?token=${resetToken}`;
+      const resetUrl = `https://nova-xi-coral.vercel.app/reset-password?token=${resetToken}`;
       const result = await this.resend.emails.send({
         from: this.fromAddresses.security,
         to: email,
@@ -769,7 +769,7 @@ class AureusNovaEmailService {
     collectionName?: string;
   }) {
     try {
-      const nftUrl = `https://app.aureusnova.com/nft/${nftId}`;
+      const nftUrl = `https://nova-xi-coral.vercel.app/marketplace/${nftId}`;
       const result = await this.resend.emails.send({
         from: this.fromAddresses.nft,
         to: email,
@@ -830,8 +830,8 @@ class AureusNovaEmailService {
                 <!-- Footer -->
                 <div class="footer">
                     <div class="footer-links">
-                        <a href="https://aureusnova.com/nft-guide">NFT Guide</a>
-                        <a href="https://aureusnova.com/support">Support</a>
+                        <a href="hhttps://nova-xi-coral.vercel.app/nft-guide">NFT Guide</a>
+                        <a href="hhttps://nova-xi-coral.vercel.app/support">Support</a>
                     </div>
                     <p style="color: rgba(248,250,255,0.8); font-size: 14px; margin-top: 16px;">
                         © 2025 AureusNova Inc. All rights reserved.
@@ -866,7 +866,7 @@ class AureusNovaEmailService {
     collectionId: string;
   }) {
     try {
-      const collectionUrl = `https://app.aureusnova.com/collection/${collectionId}`;
+      const collectionUrl = `https://nova-xi-coral.vercel.app/collections/${collectionId}`;
       const result = await this.resend.emails.send({
         from: this.fromAddresses.nft,
         to: email,
@@ -927,8 +927,8 @@ class AureusNovaEmailService {
                 <!-- Footer -->
                 <div class="footer">
                     <div class="footer-links">
-                        <a href="https://aureusnova.com/collection-guide">Collection Guide</a>
-                        <a href="https://aureusnova.com/support">Support</a>
+                        <a href="hhttps://nova-xi-coral.vercel.app/collection-guide">Collection Guide</a>
+                        <a href="hhttps://nova-xi-coral.vercel.app/support">Support</a>
                     </div>
                     <p style="color: rgba(248,250,255,0.8); font-size: 14px; margin-top: 16px;">
                         © 2025 AureusNova Inc. All rights reserved.
@@ -1044,7 +1044,7 @@ class AureusNovaEmailService {
 
                     <!-- Call to Action -->
                     <div style="text-align: center; margin: 30px 0;">
-                        <a href="https://app.aureusnova.com/wallet" class="cta-button">
+                        <a href="https://nova-xi-coral.vercel.app/wallet" class="cta-button">
                             View Your Wallet
                         </a>
                     </div>
@@ -1053,8 +1053,8 @@ class AureusNovaEmailService {
                 <!-- Footer -->
                 <div class="footer">
                     <div class="footer-links">
-                        <a href="https://aureusnova.com/transactions-guide">Transactions Guide</a>
-                        <a href="https://aureusnova.com/support">Support</a>
+                        <a href="hhttps://nova-xi-coral.vercel.app/transactions-guide">Transactions Guide</a>
+                        <a href="hhttps://nova-xi-coral.vercel.app/support">Support</a>
                     </div>
                     <p style="color: rgba(248,250,255,0.8); font-size: 14px; margin-top: 16px;">
                         © 2025 AureusNova Inc. All rights reserved.
@@ -1153,7 +1153,7 @@ class AureusNovaEmailService {
 
                     <!-- Call to Action -->
                     <div style="text-align: center; margin: 30px 0;">
-                        <a href="https://app.aureusnova.com/transactions" class="cta-button">
+                        <a href="https://nova-xi-coral.vercel.app/transactions" class="cta-button">
                             Track Your Withdrawal
                         </a>
                     </div>
@@ -1162,8 +1162,8 @@ class AureusNovaEmailService {
                 <!-- Footer -->
                 <div class="footer">
                     <div class="footer-links">
-                        <a href="https://aureusnova.com/withdrawal-guide">Withdrawal Guide</a>
-                        <a href="https://aureusnova.com/support">Support</a>
+                        <a href="hhttps://nova-xi-coral.vercel.app/withdrawal-guide">Withdrawal Guide</a>
+                        <a href="hhttps://nova-xi-coral.vercel.app/support">Support</a>
                     </div>
                     <p style="color: rgba(248,250,255,0.8); font-size: 14px; margin-top: 16px;">
                         © 2025 AureusNova Inc. All rights reserved.
@@ -1252,7 +1252,7 @@ class AureusNovaEmailService {
 
                     <!-- Call to Action -->
                     <div style="text-align: center; margin: 30px 0;">
-                        <a href="https://app.aureusnova.com/transactions" class="cta-button">
+                        <a href="https://nova-xi-coral.vercel.app/transactions" class="cta-button">
                             View Transaction History
                         </a>
                     </div>
@@ -1261,8 +1261,8 @@ class AureusNovaEmailService {
                 <!-- Footer -->
                 <div class="footer">
                     <div class="footer-links">
-                        <a href="https://aureusnova.com/withdrawal-guide">Withdrawal Guide</a>
-                        <a href="https://aureusnova.com/support">Support</a>
+                        <a href="hhttps://nova-xi-coral.vercel.app/withdrawal-guide">Withdrawal Guide</a>
+                        <a href="hhttps://nova-xi-coral.vercel.app/support">Support</a>
                     </div>
                     <p style="color: rgba(248,250,255,0.8); font-size: 14px; margin-top: 16px;">
                         © 2025 AureusNova Inc. All rights reserved.

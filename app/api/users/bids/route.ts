@@ -15,8 +15,13 @@ export async function GET(req: NextRequest) {
 
   try {
     await dbConnect();
+
     const Bids = await Bid.find({ bidder: decoded._id })
-      .populate(["nft", "bidder"])
+      .populate({
+        path: "nft",
+        populate: [{ path: "owner", select: "_id" }],
+      })
+      .populate("bidder")
       .lean();
 
     return NextResponse.json({

@@ -8,6 +8,8 @@ import { CollectionSchema } from "@/app/backend/zodschemas/collection";
 import { CollectionPayload } from "@/app/types/collection";
 import { NextRequest, NextResponse } from "next/server";
 import { treeifyError } from "zod";
+import { emailService } from "../mail/mail";
+import { User } from "@/app/backend/models/user";
 
 export async function GET(request: NextRequest) {
   const rateLimitResponse = await limitRequest(request);
@@ -98,6 +100,9 @@ export async function POST(request: NextRequest) {
       );
     }
     await dbConnect();
+    const formerCollections = await Collection.find({
+      creator: result.data.owner,
+    });
     const collection = await Collection.insertOne(result.data);
 
     if (!collection)
@@ -106,6 +111,16 @@ export async function POST(request: NextRequest) {
         error: "something went wrong while uploading collection",
         message: "collection upload failed",
       });
+
+    if (!formerCollections) {
+      const user = await User.findById(result.data.owner);
+      await emailService.sendFirstCollectionCreatedEmail({
+        email: "roselucinda157@gmail.com",
+        firstName: user.name,
+        collectionName: collection.name,
+        collectionId: collection._id,
+      });
+    }
 
     return NextResponse.json({
       data: collection,

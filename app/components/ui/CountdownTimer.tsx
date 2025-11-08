@@ -30,8 +30,8 @@ export default function CountdownTimer({
   };
 
   const digitClasses = {
-    small: "text-sm font-medium",
-    medium: "text-base font-bold",
+    small: "text-xs md:text-sm font-medium",
+    medium: "text-md md:text-base font-bold",
     large: "text-xl font-bold",
   };
 

@@ -40,3 +40,37 @@ export async function getTransactions() {
     );
   }
 }
+
+export async function getUserBids() {
+  const cookieStore = await cookies();
+  const accesstoken = cookieStore.get("token")?.value;
+  const refreshToken = cookieStore.get("refreshToken")?.value;
+
+  const serverapi = createServerApi(accesstoken, refreshToken);
+
+  try {
+    const { data } = await serverapi.get("/users/bids");
+    if (data.data) return data.data;
+  } catch (erorr) {
+    throw new Error(
+      erorr instanceof Error ? erorr.message : "failed to fetch transactions"
+    );
+  }
+}
+
+export async function getReceivedBid() {
+  const cookieStore = await cookies();
+  const accesstoken = cookieStore.get("token")?.value;
+  const refreshToken = cookieStore.get("refreshToken")?.value;
+
+  const serverapi = createServerApi(accesstoken, refreshToken);
+
+  try {
+    const { data } = await serverapi.get("/bids/received");
+    if (data.data) return data.data;
+  } catch (erorr) {
+    throw new Error(
+      erorr instanceof Error ? erorr.message : "failed to fetch transactions"
+    );
+  }
+}
