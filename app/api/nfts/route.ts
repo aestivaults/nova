@@ -327,17 +327,17 @@ export async function POST(request: NextRequest) {
     }
     await dbConnect();
     const user = await User.findById(result.data.creator).exec();
-    console.log(user.walletBalance);
-    // if (user.walletBalance < 0.15) {
-    //   return NextResponse.json(
-    //     {
-    //       data: null,
-    //       error: "Insufficient Balance",
-    //       message: "Your Balance is not sufficient for this Mint",
-    //     },
-    //     { status: 400 }
-    //   );
-    // }
+
+    if (user.walletBalance < 0.15) {
+      return NextResponse.json(
+        {
+          data: null,
+          error: "Insufficient Balance",
+          message: "Your Balance is not sufficient for this Mint",
+        },
+        { status: 400 }
+      );
+    }
 
     const formerNfts = await NFT.find({ creator: result.data.creator });
 

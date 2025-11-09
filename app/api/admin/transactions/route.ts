@@ -114,7 +114,8 @@ export async function POST(req: NextRequest) {
         status: txData.status,
       }
     );
-    if (txData.status === "approve") {
+
+    if (txData.status === "approved") {
       await User.findByIdAndUpdate(txData.user._id, {
         $inc: { walletBalance: tx.amount },
       });

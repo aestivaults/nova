@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 
 import Dialog from "@/app/components/ui/Dialog";
 import Modal from "@/app/components/ui/Modal";
-import ThemeSelector from "@/app/components/ui/Themeselector";
 import { useAuth } from "@/app/context/AuthContext";
 import { formatEthPrice } from "@/app/utils/formatters";
 import {
@@ -97,7 +96,7 @@ export default function SuspenseNav() {
               <Image
                 alt="aureus nova logo"
                 fill
-                sizes="100px"
+                sizes="40px"
                 src="/logo.png"
                 className="object-cover"
               />
@@ -179,8 +178,6 @@ export default function SuspenseNav() {
           </div>
           {/* Right side actions*/}
           <div className="flex items-center gap-4">
-            <ThemeSelector className="hidden md:block" />
-
             {/* Auth buttons or User menu */}
             {isAuthenticated && user ? (
               <div className="flex items-center gap-3">
@@ -197,6 +194,7 @@ export default function SuspenseNav() {
                       <Image
                         fill
                         src={user?.avatar}
+                        sizes="40px"
                         alt={user?.username ?? "user"}
                         className="object-cover animate-glow"
                       />

@@ -115,6 +115,7 @@ export default function Users() {
                           <Image
                             src={user.avatar || "/pfp.png"}
                             alt={user.email}
+                            sizes="32px"
                             className="object-cover"
                             fill
                           />

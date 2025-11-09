@@ -12,7 +12,7 @@ export default function MyBids({ activeBids }: { activeBids: Bid[] }) {
       <div className="w-20 relative h-20 rounded-lg overflow-hidden mr-4 flex-shrink-0">
         <Image
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes="80px"
           src={bid.nft?.media_url ?? ""}
           alt={bid.nft.title}
           className="w-full h-full object-cover"

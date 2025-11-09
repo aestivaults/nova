@@ -48,6 +48,7 @@ export default function Overview({
                   src={user.avatar || "/pfp.png"}
                   alt={user.username}
                   fill
+                  sizes="40px"
                   className="object-cover"
                 />
               </div>

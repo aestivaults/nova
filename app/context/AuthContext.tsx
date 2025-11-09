@@ -1,8 +1,16 @@
 "use client";
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import { User } from "../types/user";
 import { api } from "../utils/api";
+import { useQuery } from "@tanstack/react-query";
+import { getUser } from "../lib/clientFunctions";
 
 const url = process.env.NEXT_PUBLIC_API_URL as string;
 
@@ -42,8 +50,21 @@ export default function AuthProvider({
   children: ReactNode;
   serverUser: User | null;
 }) {
-  const [user, setUser] = useState<User | null>(serverUser);
+  const [user, setUser] = useState<User | null>(null);
+
   const isAuthenticated = !!user;
+
+  const { data: userData } = useQuery({
+    queryKey: ["user"],
+    queryFn: getUser,
+    enabled: !!serverUser,
+  });
+
+  useEffect(() => {
+    if (userData) {
+      setUser(userData);
+    }
+  }, [userData]);
 
   const login = async ({ email, password }: login) => {
     try {

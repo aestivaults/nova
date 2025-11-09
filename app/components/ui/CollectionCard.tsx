@@ -40,21 +40,19 @@ export default function CollectionCard({
             fill
             src={collection?.banner_image || ""}
             alt={collection.name}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="100vw"
             className="object-cover"
           />
         </div>
 
-        <div className="p-3 flex items-center">
-          <div className="w-10 h-10 relative rounded-lg overflow-hidden mr-3">
-            <Image
-              fill
-              src={collection?.logo_image || ""}
-              alt={collection.name}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover"
-            />
-          </div>
+        <div className="p-3 flex items-center  rounded-lg">
+          <Image
+            src={collection?.logo_image || ""}
+            alt={collection.name}
+            width={40}
+            height={40}
+            className="object-cover mr-3"
+          />
 
           <div>
             <h3 className="font-medium text-xs  md:text-sm line-clamp-1">

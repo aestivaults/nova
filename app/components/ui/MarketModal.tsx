@@ -39,14 +39,13 @@ const MarketModal = ({ nft }: { nft: NftPayload }) => {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full">
-                <Image
-                  src={nft.media_url}
-                  alt={nft.title}
-                  fill
-                  className="object-cover"
-                />
-              </div>
+              <Image
+                sizes="100vw"
+                src={nft.media_url}
+                alt={nft.title}
+                fill
+                className="object-cover"
+              />
             )}
           </div>
         </div>
@@ -82,14 +81,13 @@ const MarketModal = ({ nft }: { nft: NftPayload }) => {
             <div>
               <p className="text-light/60 text-sm">Creator</p>
               <div className="flex items-center mt-1">
-                <div className="relative w-6 h-6  mr-2 ">
-                  <Image
-                    fill
-                    src={nft?.creator?.avatar}
-                    alt={nft.creator.name}
-                    className="object-cover rounded-full"
-                  />
-                </div>
+                <Image
+                  height={30}
+                  width={30}
+                  src={nft?.creator?.avatar}
+                  alt={nft.creator.name}
+                  className="object-cover rounded-full mr-2"
+                />
 
                 <span>{nft.creator.name}</span>
               </div>

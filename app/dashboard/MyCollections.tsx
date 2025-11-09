@@ -39,6 +39,7 @@ export default function MyCollections({
               <div className="h-40 w-full relative overflow-hidden">
                 <Image
                   fill
+                  sizes="160px"
                   src={collection.banner_image}
                   alt={collection.name}
                   className="w object-cover"
@@ -49,6 +50,7 @@ export default function MyCollections({
                 <div className="w-20 relative h-20 rounded-xl overflow-hidden border-4 border-darker">
                   <Image
                     fill
+                    sizes="80px"
                     src={collection.logo_image}
                     alt={collection.name}
                     className="-full h-full object-cover"

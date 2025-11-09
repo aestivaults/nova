@@ -67,7 +67,8 @@ const BidWithNFT = ({
             fill
             src={bid.nft.media_url}
             alt={bid.nft.title}
-            className="w-full h-full object-cover"
+            sizes="80px"
+            className="object-cover"
           />
         </div>
         {/* Bid Details */}

@@ -36,7 +36,7 @@ export default async function NFTDetailPage({
     return (
       <div className="container py-12">
         <div className="glass-card p-8 text-center">
-          <div className="text-4xl text-light/30 mb-4">
+          <div className="text-4xl mx-auto text-light/30 mb-4">
             <Search />
           </div>
           <h2 className="text-2xl font-bold mb-4">NFT Not Found</h2>

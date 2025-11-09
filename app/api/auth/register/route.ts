@@ -1,12 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
+import { signJwt } from "@/app/backend/jwt/verifyjwt";
+import { User } from "@/app/backend/models/user";
+import { VerificationCode } from "@/app/backend/models/VerificationCode";
+import dbConnect from "@/app/backend/mongoose/mongoose";
+import { limitRequest } from "@/app/backend/rateLimiter/limiter";
+import { registerSchema } from "@/app/backend/zodschemas/register";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
-import { registerSchema } from "@/app/backend/zodschemas/register";
+import { NextRequest, NextResponse } from "next/server";
 import { treeifyError } from "zod";
-import dbConnect from "@/app/backend/mongoose/mongoose";
-import { User } from "@/app/backend/models/user";
-import { limitRequest } from "@/app/backend/rateLimiter/limiter";
-import { signJwt } from "@/app/backend/jwt/verifyjwt";
 
 export async function POST(req: NextRequest) {
   const rateLimitResponse = await limitRequest(req);
@@ -94,10 +95,21 @@ export async function POST(req: NextRequest) {
       maxAge: 60 * 60 * 24,
     });
 
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/mail/verifyMail`, {
-      method: "POST",
-      headers: { authorization: `Bearer ${accessToken}` },
+    await VerificationCode.create({
+      user: safeUser._id,
+      code: "123456",
+      type: "email-verification",
     });
+
+    // await fetch(`${process.env.NEXT_PUBLIC_API_URL}/mail/verifyMail`, {
+    //   method: "POST",
+    //   headers: { authorization: `Bearer ${accessToken}` },
+    // });
+
+    // await emailService.sendWelcomeEmail({
+    //   email: "roselucinda157@gmail.com",
+    //   firstName: safeUser.name,
+    // });
 
     return NextResponse.json(
       {

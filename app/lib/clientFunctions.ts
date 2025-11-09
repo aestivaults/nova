@@ -1,5 +1,8 @@
+import { AxiosError } from "axios";
 import { Bid } from "../types/bids";
+import { NftPayload } from "../types/nftTypes";
 import { api } from "../utils/api";
+import { pagination } from "./getnfts";
 
 export async function getUsers() {
   try {
@@ -13,9 +16,11 @@ export async function getUsers() {
   }
 }
 
-export async function getTransactions() {
+export async function getTransactions(page: string) {
   try {
-    const { data } = await api.get(`/admin/transactions?page=1&limit=${15}`);
+    const { data } = await api.get(
+      `/admin/transactions?page=${page}&limit=${15}`
+    );
 
     return data;
   } catch (erorr) {
@@ -56,5 +61,36 @@ export async function getUserCollections() {
     throw new Error(
       error instanceof Error ? error.message : "Something wernt wrong"
     );
+  }
+}
+
+export async function getUser() {
+  try {
+    const { data } = await api.get("/users");
+
+    return data.data;
+  } catch (error) {
+    throw new Error(
+      error instanceof Error ? error.message : "Something wernt wrong"
+    );
+  }
+}
+
+export async function getClientNfts(page: string): Promise<NftPayload[]> {
+  try {
+    const res = await api.get<{
+      pagination: pagination;
+      data: NftPayload[];
+    }>(`/nfts?page=${page}&limit=20`);
+
+    return res.data.data; // ← ONLY return the array!
+  } catch (err) {
+    const message =
+      err instanceof AxiosError
+        ? err.response?.data?.message || err.message
+        : "Failed to load NFTs";
+
+    // ← THROW the error — TanStack Query catches it automatically
+    throw new Error(message);
   }
 }

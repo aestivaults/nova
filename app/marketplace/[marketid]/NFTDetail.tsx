@@ -26,7 +26,7 @@ export default function NFTDetail({ nft }: { nft: NftPayload }) {
   } = useBidorBuy(nft)!;
 
   return (
-    <div className="glass-card p-6">
+    <div className="glass-card p-2 md:p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Media */}
         <div className="rounded-lg min-h-[400px] relative overflow-hidden">

@@ -8,8 +8,8 @@ import NFTDetail from "./NFTDetail";
 export default function NFTdetailPage({ nft }: { nft: NftPayload }) {
   return (
     <section className="py-20">
-      <div className="container">
-        <div className="mb-6 ">
+      <div className="max-w-6xl mx-auto md:px-2">
+        <div className="mb-6">
           <Link href={"/marketplace"}>
             <Button
               variant="text"

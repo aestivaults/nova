@@ -17,11 +17,11 @@ import ActionButton from "./ActionButtons";
 
 export default function Transactions() {
   const { searchParams } = useSetParams();
-  const page = searchParams.get("page") || 1;
+  const page = searchParams.get("page") || "1";
 
   const { data: response, isLoading } = useQuery({
     queryKey: ["transactions", page],
-    queryFn: getTransactions,
+    queryFn: () => getTransactions(page),
   });
 
   if (isLoading) return <Loader />;

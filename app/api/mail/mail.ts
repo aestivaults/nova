@@ -38,15 +38,12 @@ class AureusNovaEmailService {
   async sendWelcomeEmail({
     email,
     firstName,
-    lastName,
   }: {
     email: string;
     firstName: string;
-    lastName: string;
-    companyName: string;
   }) {
     try {
-      const fullName = `${firstName} ${lastName}`.trim();
+      const fullName = `${firstName}`.trim();
       const result = await this.resend.emails.send({
         from: this.fromAddresses.welcome,
         to: email,

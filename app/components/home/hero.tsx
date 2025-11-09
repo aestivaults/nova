@@ -93,6 +93,7 @@ export default function Hero({ nfts }: { nfts: NftPayload[] }) {
                       <Image
                         src={nft.media_url}
                         fill
+                        sizes="250px"
                         alt={nft.title}
                         className="object-cover "
                       />

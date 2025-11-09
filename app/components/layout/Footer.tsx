@@ -22,7 +22,7 @@ export default function Footer() {
                 <Image
                   alt="aureus nova logo"
                   fill
-                  sizes="100px"
+                  sizes="40px"
                   src="/logo.png"
                   className="object-cover"
                 />
