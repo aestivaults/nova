@@ -5,11 +5,13 @@ import { NftPayload } from "@/app/types/nftTypes";
 
 import { useEffect, useState } from "react";
 import Slider from "../ui/Slider";
+import { useInView } from "@/app/hooks/inView";
 
 export default function Auction({ nfts }: { nfts: NftPayload[] }) {
   const [type, setType] = useState<"default" | "compact">("compact");
   const { navigate } = useSetParams();
 
+  const { ref, inView } = useInView<HTMLDivElement>();
   const handleBid = (nft: NftPayload) => {
     navigate(`/marketplace/${nft._id}`);
   };
@@ -49,7 +51,7 @@ export default function Auction({ nfts }: { nfts: NftPayload[] }) {
   );
 
   return (
-    <section className="py-16 bg-gradient-to-b from-dark to-darker">
+    <section ref={ref} className="py-16 bg-gradient-to-b from-dark to-darker">
       <div className="container">
         <Slider
           title={"Live Auctions"}
@@ -57,6 +59,7 @@ export default function Auction({ nfts }: { nfts: NftPayload[] }) {
           items={liveAuctions}
           renderItem={renderNFTCard}
           slidesToShow={4}
+          autoplay={inView ? true : false}
         />
       </div>
     </section>

@@ -6,24 +6,30 @@ import { Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Button from "../ui/button";
+import { useInView } from "@/app/hooks/inView";
 
 const HeroCarousel = ({ data }: { data: NftPayload[] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const router = useRouter();
+  const { ref, inView } = useInView<HTMLDivElement>();
   const navigate = (path: string) => router.push(path);
 
   useEffect(() => {
+    if (!inView) return;
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % data.length);
     }, 3000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [inView, data.length]);
 
   const current = data[currentSlide];
 
   return (
-    <div className="relative md:h-[600px] h-screen p-8 w-full overflow-hidden bg-gradient-to-b from-dark to-darker">
+    <div
+      ref={ref}
+      className="relative md:h-[600px] h-screen p-8 w-full overflow-hidden bg-gradient-to-b from-dark to-darker"
+    >
       <AnimatePresence mode="wait">
         <motion.div
           key={current?._id}

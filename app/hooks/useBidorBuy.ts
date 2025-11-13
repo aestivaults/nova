@@ -1,5 +1,4 @@
 "use client";
-import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
@@ -10,7 +9,6 @@ import { useSetParams } from "./useSetParams";
 
 type UseBidOrBuyReturn = {
   isLoading: boolean;
-  handleBuy: () => Promise<void>;
   handleBid: () => Promise<void>;
   bidAmount: string | number;
   setBidAmount: React.Dispatch<React.SetStateAction<string | number>>;
@@ -104,72 +102,6 @@ export function useBidorBuy(nft: NftPayload): UseBidOrBuyReturn {
     }
   };
 
-  // Handle buy now
-  const handleBuy = async () => {
-    if (bidAmount && Number(bidAmount) > 0) {
-      if (!isAuthenticated) {
-        navigate("/auth?login", {
-          state: { from: `/marketplace/${nft._id}` },
-        });
-        return;
-      }
-      if (nft.owner._id === user?._id) {
-        addNotification({
-          title: "Error!",
-          action: "bid",
-          type: "warning",
-          message: `You cannot Buy your own listing`,
-          recipient: user?._id ?? "",
-          isRead: false,
-          isToast: true,
-        });
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        await api.patch("/nfts", {
-          nft_id: nft._id,
-          user_id: user?._id,
-        });
-
-        addNotification({
-          title: "NFT Purchase!",
-          action: "sale",
-          type: "success",
-          message: `Purchase of ${nft.title} for ${bidAmount} was successful`,
-          recipient: user?._id ?? "",
-          isRead: false,
-          isToast: false,
-        });
-
-        addNotification({
-          title: "NFT Purchase!",
-          action: "sale",
-          type: "success",
-          message: `Purchase of ${nft.title} for ${bidAmount} was successful`,
-          recipient: user?._id ?? "",
-          isRead: false,
-          isToast: true,
-        });
-        router.refresh();
-      } catch (error) {
-        const err =
-          error instanceof AxiosError ? error.response?.data : "unknown error";
-        const regex = /\b[bB]alance\b/;
-        if (regex.test(err.error) && regex.test(err.message)) {
-          toast("error", "sale", err.error, err.message, 7000);
-          setIsLoading(false);
-          return;
-        }
-        toast("error", "sale", "Error!", "Something went wrong!", 7000);
-        return;
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  };
-
   const handleShare = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
@@ -223,7 +155,6 @@ export function useBidorBuy(nft: NftPayload): UseBidOrBuyReturn {
   };
   return {
     isLoading,
-    handleBuy,
     handleBid,
     bidAmount,
     handleShare,

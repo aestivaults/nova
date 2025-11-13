@@ -2,6 +2,7 @@
 import { BidsList } from "@/app/components/ui/BidCard";
 import Button from "@/app/components/ui/button";
 import CountdownTimer from "@/app/components/ui/CountdownTimer";
+import Modal from "@/app/components/ui/Modal";
 import { useBidorBuy } from "@/app/hooks/useBidorBuy";
 import { NftPayload } from "@/app/types/nftTypes";
 import {
@@ -15,7 +16,6 @@ import Image from "next/image";
 export default function NFTDetail({ nft }: { nft: NftPayload }) {
   const {
     isLoading,
-    handleBuy,
     handleBid,
     bidAmount,
     setBidAmount,
@@ -75,7 +75,6 @@ export default function NFTDetail({ nft }: { nft: NftPayload }) {
               </Button>
             </div>
           </div>
-
           <div className="flex gap-4 mb-6">
             <div>
               <p className="text-light/60 text-sm">Creator</p>
@@ -111,7 +110,6 @@ export default function NFTDetail({ nft }: { nft: NftPayload }) {
               </div>
             )}
           </div>
-
           <div className="glass-card p-4 mb-6">
             {isAuction ? (
               <>
@@ -135,19 +133,16 @@ export default function NFTDetail({ nft }: { nft: NftPayload }) {
               </div>
             )}
           </div>
-
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-2">Description</h3>
             <p className="text-light/70">{nft.description}</p>
           </div>
-
           {isAuction && nft.bids && nft.bids.length > 0 && (
             <div className="mb-6">
               <h3 className="text-lg font-medium mb-2">Bid History</h3>
               <BidsList bids={nft.bids} variant="history" showActions={false} />
             </div>
           )}
-
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-2">Details</h3>
             <div className="glass-card p-4">
@@ -169,7 +164,6 @@ export default function NFTDetail({ nft }: { nft: NftPayload }) {
               </div>
             </div>
           </div>
-
           {isAuction ? (
             <div className="flex flex-col gap-4">
               <div className="flex gap-4">
@@ -203,15 +197,16 @@ export default function NFTDetail({ nft }: { nft: NftPayload }) {
               </p>
             </div>
           ) : (
-            <Button
-              variant="primary"
-              isLoading={isLoading}
-              disabled={isLoading}
-              fullWidth
-              onClick={handleBuy}
-            >
-              Buy Now for {formatEthPrice(nft.price)}
-            </Button>
+            <Modal.Open name="purchase-modal">
+              <Button
+                variant="primary"
+                isLoading={isLoading}
+                disabled={isLoading}
+                fullWidth
+              >
+                Buy Now for {formatEthPrice(nft.price)}
+              </Button>
+            </Modal.Open>
           )}
         </div>
       </div>

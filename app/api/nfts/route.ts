@@ -10,10 +10,10 @@ import dbConnect from "@/app/backend/mongoose/mongoose";
 import { limitRequest } from "@/app/backend/rateLimiter/limiter";
 import { buynftSchema, nftInputSchema } from "@/app/backend/zodschemas/nft";
 import { NftPayload } from "@/app/types/nftTypes";
+import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { treeifyError } from "zod";
 import { emailService } from "../mail/mail";
-import mongoose from "mongoose";
 
 export async function GET(request: NextRequest) {
   const rateLimitResponse = await limitRequest(request);
@@ -34,12 +34,19 @@ export async function GET(request: NextRequest) {
     await Bid.find();
     const nfts = await NFT.find()
       .populate([
-        "creator",
-        "owner",
+        {
+          path: "creator",
+          select: "name username avatar isVerified owner_id walletBalance", // only include these fields
+        },
+        {
+          path: "owner",
+          select: "name username avatar isVerified owner_id walletBalance", // example fields
+        },
         {
           path: "bids",
           populate: {
             path: "bidder",
+            select: "name username avatar isVerified owner_id walletBalance",
           },
           options: { limit: 5 },
         },
@@ -226,32 +233,83 @@ export async function PATCH(request: NextRequest) {
       .populate("owning_collection", "name")
       .exec();
 
-    await Collection.findByIdAndUpdate(
+    const formerCollection = await Collection.findByIdAndUpdate(
       result.data.former_collectionID,
       {
         $pull: { nfts: result.data.nft_id },
+      },
+      { new: true, session }
+    ).lean<{ _id: string; nfts: string[] }>();
+
+    if (!formerCollection) {
+      await session.abortTransaction();
+      session.endSession();
+      return NextResponse.json(
+        {
+          data: null,
+          error: "Invalid Collection",
+          message: "NFT doesnt belong to any Collection",
+        },
+        { status: 400 }
+      );
+    }
+
+    const remainingNFTs = await NFT.find({
+      _id: { $in: formerCollection.nfts },
+    })
+      .sort({ price: 1 })
+      .lean();
+
+    const newFloorPrice = remainingNFTs.length > 0 ? remainingNFTs[0].price : 0;
+    const newTotalVolume = remainingNFTs.reduce(
+      (sum, nft) => sum + (nft.price || 0),
+      0
+    );
+
+    await Collection.findByIdAndUpdate(
+      formerCollection._id,
+      {
         $set: {
-          floor_price: await NFT.find({
-            _id: {
-              $in: (
-                (
-                  await Collection.findById(result.data.former_collectionID)
-                    .select("nfts")
-                    .lean<{ nfts: string[] }>()
-                )?.nfts || []
-              ).filter(
-                (id: string) => id.toString() !== result.data.nft_id.toString()
-              ),
-            },
-          })
-            .sort({ price: 1 })
-            .limit(1)
-            .then((nfts) => (nfts.length > 0 ? nfts[0].price : 0)),
+          floor_price: newFloorPrice,
+          total_volume: newTotalVolume,
         },
       },
       { session }
     );
 
+    await Collection.findByIdAndUpdate(
+      result.data.owning_collection,
+      [
+        {
+          $set: {
+            nfts: {
+              $cond: [
+                { $in: [result.data.nft_id, "$nfts"] },
+                "$nfts",
+                { $concatArrays: ["$nfts", [result.data.nft_id]] },
+              ],
+            },
+            total_volume: {
+              $add: [{ $ifNull: ["$total_volume", 0] }, purchasednft.price],
+            },
+            floor_price: {
+              $cond: [
+                {
+                  $or: [
+                    { $eq: ["$floor_price", null] },
+                    { $eq: ["$floor_price", 0] },
+                    { $lt: [purchasednft.price, "$floor_price"] },
+                  ],
+                },
+                purchasednft.price,
+                "$floor_price",
+              ],
+            },
+          },
+        },
+      ],
+      { new: true, session }
+    );
     const notification = {
       type: "success",
       action: "bid",

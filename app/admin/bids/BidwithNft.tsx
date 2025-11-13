@@ -184,7 +184,7 @@ const BidWithNFT = ({
           </div>
         </div>
       </div>
-      <PurchaseBid nft={bid.nft} onClose={() => {}} />
+      <PurchaseBid nft={bid.nft} type="bid" />
     </>
   );
 };

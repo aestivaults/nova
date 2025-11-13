@@ -2,6 +2,7 @@
 
 import NFTCard from "@/app/components/ui/NFTCard";
 import Slider from "@/app/components/ui/Slider";
+import { useInView } from "@/app/hooks/inView";
 import { useSetParams } from "@/app/hooks/useSetParams";
 import { NftPayload } from "@/app/types/nftTypes";
 import { useEffect, useState } from "react";
@@ -9,6 +10,7 @@ import { useEffect, useState } from "react";
 export default function TrendingNFTs({ nfts }: { nfts: NftPayload[] }) {
   const [type, setType] = useState<"default" | "compact">("compact");
   const { navigate } = useSetParams();
+  const { ref, inView } = useInView<HTMLDivElement>();
 
   const handleBid = (nft: NftPayload) => {
     navigate(`/marketplace/${nft._id}`);
@@ -45,7 +47,7 @@ export default function TrendingNFTs({ nfts }: { nfts: NftPayload[] }) {
   );
 
   return (
-    <div className="py-16">
+    <div ref={ref} className="py-16">
       <div className="container">
         <Slider
           title="Trending NFTs"
@@ -53,7 +55,7 @@ export default function TrendingNFTs({ nfts }: { nfts: NftPayload[] }) {
           slidesToShow={4}
           items={nfts as NftPayload[]}
           renderItem={renderNFTCard}
-          autoplay={true}
+          autoplay={inView ? true : false}
         />
       </div>
     </div>

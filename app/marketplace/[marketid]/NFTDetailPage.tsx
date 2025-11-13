@@ -4,6 +4,7 @@ import { NftPayload } from "@/app/types/nftTypes";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import NFTDetail from "./NFTDetail";
+import PurchaseBid from "@/app/my-bids/PurchaseBid";
 
 export default function NFTdetailPage({ nft }: { nft: NftPayload }) {
   return (
@@ -32,6 +33,7 @@ export default function NFTdetailPage({ nft }: { nft: NftPayload }) {
           </div>
         </div>
       </div>
+      <PurchaseBid nft={nft} type="buy" />
     </section>
   );
 }

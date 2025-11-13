@@ -3,26 +3,30 @@ import { AlertCircle, CheckCircle } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import Button from "../components/ui/button";
-import Modal from "../components/ui/Modal";
+import Modal, { UseModal } from "../components/ui/Modal";
 import { getUserCollections } from "../lib/clientFunctions";
 import { CollectionPayload } from "../types/collection";
 import { NftPayload } from "../types/nftTypes";
 import { api } from "../utils/api";
 import { useAuth } from "../context/AuthContext";
+import { useSetParams } from "../hooks/useSetParams";
+import { AxiosError } from "axios";
 
 interface PurchaseBidProps {
   nft: NftPayload;
-  onClose: () => void;
+  type: "buy" | "bid";
 }
 
-const PurchaseBid: React.FC<PurchaseBidProps> = ({ nft, onClose }) => {
-  const { user } = useAuth();
+const PurchaseBid: React.FC<PurchaseBidProps> = ({ nft, type = "buy" }) => {
+  const { user, isAuthenticated } = useAuth();
+  const { navigate } = useSetParams();
   const [selectedCollection, setSelectedCollection] = useState<string>("");
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [purchaseStatus, setPurchaseStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const { close } = UseModal();
 
   // Fetch user collections
   const { data: collections, isLoading: collectionsLoading } = useQuery<
@@ -34,22 +38,41 @@ const PurchaseBid: React.FC<PurchaseBidProps> = ({ nft, onClose }) => {
 
   // Handle NFT purchase
   const handlePurchase = async () => {
+    if (!isAuthenticated || !user) {
+      navigate("/auth?login", {
+        state: { from: `/marketplace/${nft._id}` },
+      });
+      return;
+    }
+    const currentPrice = type === "bid" ? nft.current_bid : nft.price;
+
+    if (user?.walletBalance < currentPrice) {
+      setPurchaseStatus("error");
+      setErrorMessage("Failed to complete purchase. insufficient Balance.");
+      return;
+    }
+
     setIsPurchasing(true);
     setPurchaseStatus("idle");
     try {
-      const res = await api.patch("/nfts", {
+      await api.patch("/nfts", {
         user_id: user?._id,
         nft_id: nft._id,
         former_collectionID: nft.owning_collection,
         owning_collection: selectedCollection,
       });
-      console.log(res);
-      //   await purchaseNFT(nft.id, selectedCollection);
+
       setPurchaseStatus("success");
+      close();
     } catch (error) {
-      console.log(error);
+      const errMessage =
+        error instanceof AxiosError
+          ? error.response?.data?.message ||
+            error.message ||
+            "Unknown Axios error"
+          : "Failed to complete the purchase. Please try again";
       setPurchaseStatus("error");
-      setErrorMessage("Failed to complete the purchase. Please try again.");
+      setErrorMessage(errMessage);
     } finally {
       setIsPurchasing(false);
     }
@@ -120,7 +143,7 @@ const PurchaseBid: React.FC<PurchaseBidProps> = ({ nft, onClose }) => {
 
       {/* Footer */}
       <div className="flex justify-end space-x-4 p-6 border-t border-gray-200 dark:border-gray-700">
-        <Button variant="secondary" onClick={onClose} disabled={isPurchasing}>
+        <Button variant="secondary" onClick={close} disabled={isPurchasing}>
           Cancel
         </Button>
         <Button
