@@ -33,7 +33,18 @@ export async function GET(req: NextRequest) {
     }
 
     // 2. Fetch NFTs by itemId
-    const likedNfts = await NFT.find({ _id: { $in: likedItemIds } }).lean();
+    const likedNfts = await NFT.find({ _id: { $in: likedItemIds } })
+      .populate([
+        {
+          path: "creator",
+          select: "name username avatar isVerified", // only include these fields
+        },
+        {
+          path: "owner",
+          select: "name username avatar isVerified", // example fields
+        },
+      ])
+      .lean();
 
     const enriched = likedNfts.map((nft) => ({
       ...nft,

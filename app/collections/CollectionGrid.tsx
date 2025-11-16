@@ -78,7 +78,7 @@ export default function CollectionGrid({
             </Button>
             <Button
               variant="secondary"
-              onClick={() => navigate("/dashboard/create-collection")}
+              onClick={() => navigate("/create-collection")}
             >
               Create Collection
             </Button>

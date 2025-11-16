@@ -73,7 +73,7 @@ export default function MintForm({
   const handleCollectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     if (selectedValue === "new") {
-      router.push("/dashboard/create-collection");
+      router.push("/create-collection");
       return;
     }
   };
@@ -147,7 +147,7 @@ export default function MintForm({
           "NFT Created Successfully!",
           5000
         );
-        router.push("/dashboard?tab=owned");
+        router.push("/dashboard/my-nfts");
       }
     } catch (error) {
       console.error("something went wrong", error);

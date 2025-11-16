@@ -29,7 +29,7 @@ function CTA() {
               </Button>
             </Link>
 
-            <Link href={"/dashboard/create-nft"}>
+            <Link href={"/create-nft"}>
               <Button variant="outline" size="large" icon={<Paintbrush />}>
                 Create NFT
               </Button>

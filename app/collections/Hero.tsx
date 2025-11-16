@@ -13,7 +13,7 @@ export default function Hero() {
       </div>
 
       <div className="mt-4 md:mt-0">
-        <Link href="/dashboard/create-collection">
+        <Link href="/create-collection">
           <Button variant="primary" icon={<PlusCircle />}>
             Create Collection
           </Button>

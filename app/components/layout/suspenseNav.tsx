@@ -127,9 +127,9 @@ export default function SuspenseNav() {
                     Dashboard
                   </Link>
                   <Link
-                    href="/dashboard/wallet"
+                    href="/wallet"
                     className={`nav-link mb-4 ${
-                      pathname === "/dashboard/wallet" ? "active" : ""
+                      pathname === "/wallet" ? "active" : ""
                     }`}
                   >
                     Wallet
@@ -223,13 +223,13 @@ export default function SuspenseNav() {
                       </Link>
 
                       <Link
-                        href="/dashboard/wallet"
+                        href="/wallet"
                         className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-light/5"
                       >
                         <WalletCardsIcon className="w-5" /> Wallet
                       </Link>
                       <Link
-                        href="/dashboard?tab=owned"
+                        href="/dashboard/my-nfts"
                         className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-light/5"
                       >
                         <ImageIcon className="w-5" /> My Nfts

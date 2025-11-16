@@ -3,6 +3,7 @@ import { useSetParams } from "@/app/hooks/useSetParams";
 import Button from "@/app/components/ui/button";
 import { useState } from "react";
 import Image from "next/image";
+import { api } from "../utils/api";
 
 export default function SignInButton() {
   const [loading, setLoading] = useState(false);
@@ -12,7 +13,9 @@ export default function SignInButton() {
   const handleSignIn = async () => {
     setLoading(true);
     try {
-      // await signIn("google", { callbackUrl: callbackUrl || "/" }); // "google" is the ID of the provider
+      window.location.href = `
+https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=http:localhost:3000/api/auth/callback/google&response_type=code&scope=openid%20email%20profile
+`;
     } catch (error) {
       console.error("Sign-in error", error);
     } finally {

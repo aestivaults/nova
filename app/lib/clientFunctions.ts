@@ -94,3 +94,14 @@ export async function getClientNfts(page: string): Promise<NftPayload[]> {
     throw new Error(message);
   }
 }
+
+export async function getUserLikes() {
+  try {
+    const { data } = await api.get("/users/likes");
+    if (data.data) return data.data;
+  } catch (erorr) {
+    throw new Error(
+      erorr instanceof Error ? erorr.message : "failed to fetch transactions"
+    );
+  }
+}

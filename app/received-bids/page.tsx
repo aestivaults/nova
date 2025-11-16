@@ -1,7 +1,6 @@
 import Tabs from "../admin/bids/BidTabs";
 import Footer from "../components/layout/Footer";
 import Navbar from "../components/layout/navbar";
-import { queryClient } from "../context/TanstackQueryClient";
 import { getReceivedBid } from "../lib/serverFunctions";
 import { Bid } from "../types/bids";
 import ReceivedBids from "./Received-bids";

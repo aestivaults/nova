@@ -13,7 +13,7 @@ export default function Hero() {
       </div>
 
       <div className="mt-4 md:mt-0">
-        <Link href="/dashboard/create-nft">
+        <Link href="/create-nft">
           <Button variant="primary" icon={<PlusCircle />}>
             Create NFT
           </Button>

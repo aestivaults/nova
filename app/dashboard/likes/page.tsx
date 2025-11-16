@@ -1,10 +1,21 @@
+"use client";
 import { Filter, Heart } from "lucide-react";
 import Link from "next/link";
-import Button from "../components/ui/button";
-import NFTCard from "../components/ui/NFTCard";
-import { NftPayload } from "../types/nftTypes";
+import Button from "../../components/ui/button";
+import NFTCard from "../../components/ui/NFTCard";
+import { useQuery } from "@tanstack/react-query";
+import { getUserLikes } from "@/app/lib/clientFunctions";
+import { NftPayload } from "@/app/types/nftTypes";
+import { NFTGridSkeleton } from "@/app/components/ui/Loader";
 
-export default function LikedNFTs({ LikedNFTS }: { LikedNFTS: NftPayload[] }) {
+export default function Page() {
+  const { data: LikedNFTS, isLoading } = useQuery<NftPayload[], Error>({
+    queryKey: ["user-likes"],
+    queryFn: getUserLikes,
+  });
+
+  if (isLoading) return <NFTGridSkeleton />;
+
   if (!LikedNFTS)
     return (
       <div className="text-center py-16 glass-card">

@@ -30,7 +30,7 @@ export default function Auctions() {
 
   useEffect(() => {
     async function getauctions() {
-      const { data, error, pagination } = await getNfts("1");
+      const { data, error } = await getNfts("1");
       if (!error && data && data.length > 0) {
         const currentAuctions = data.filter(
           (nft) =>

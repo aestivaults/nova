@@ -108,7 +108,7 @@ export default function LoginForm() {
         </div>
       </form>
 
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-white/10"></div>
@@ -123,11 +123,11 @@ export default function LoginForm() {
         <div className="grid grid-cols-1 gap-3 mt-6">
           <SignInButton />
         </div>
-      </div>
+      </div> */}
 
       <div className="text-center mt-6">
         <p className="text-sm text-white/60">
-          Don&apos;t have an account?
+          Don&apos;t have an account?{" "}
           <button
             type="button"
             className="text-primary-400 hover:text-primary-300 font-medium"

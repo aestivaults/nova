@@ -1,17 +1,24 @@
 "use client";
-import Image from "next/image";
-import Button from "../components/ui/button";
-import { useSetParams } from "../hooks/useSetParams";
-import { formatEthPrice } from "../utils/formatters";
 import { FolderOpen, Plus } from "lucide-react";
-import { CollectionPayload } from "../types/collection";
+import Image from "next/image";
+import Button from "../../components/ui/button";
+import { useSetParams } from "../../hooks/useSetParams";
+import { formatEthPrice } from "../../utils/formatters";
+import { useQuery } from "@tanstack/react-query";
+import { getUserCollections } from "@/app/lib/clientFunctions";
+import { CollectionPayload } from "@/app/types/collection";
+import { NFTGridSkeleton } from "@/app/components/ui/Loader";
 
-export default function MyCollections({
-  collections,
-}: {
-  collections: CollectionPayload[];
-}) {
+export default function Page() {
   const { navigate } = useSetParams();
+  const { data: collections, isLoading } = useQuery<CollectionPayload[], Error>(
+    {
+      queryFn: getUserCollections,
+      queryKey: ["user-collections"],
+    }
+  );
+
+  if (isLoading || !collections) return <NFTGridSkeleton />;
 
   return (
     <div>
@@ -22,7 +29,7 @@ export default function MyCollections({
           variant="primary"
           size="small"
           icon={<Plus />}
-          onClick={() => navigate("/dashboard/create-collection")}
+          onClick={() => navigate("/create-collection")}
         >
           Create Collection
         </Button>
@@ -103,7 +110,7 @@ export default function MyCollections({
           </p>
           <Button
             variant="primary"
-            onClick={() => navigate("/dashbpard/create-collection")}
+            onClick={() => navigate("/create-collection")}
           >
             Create Your First Collection
           </Button>

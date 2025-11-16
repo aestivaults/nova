@@ -18,29 +18,32 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const cookieStore = await cookies();
 
-  if (pathname.startsWith("/admin") || pathname.startsWith("/dashboard")) {
-    const token = cookieStore.get("refreshToken")?.value;
+  const token = cookieStore.get("refreshToken")?.value;
 
-    if (!token) {
-      return NextResponse.redirect(new URL("/auth/login", request.url));
-    }
+  if (!token) {
+    return NextResponse.redirect(new URL("/auth/login", request.url));
+  }
 
-    const payload = await verifyToken(token);
+  const payload = await verifyToken(token);
 
-    if (!payload) {
-      return NextResponse.redirect(new URL("/auth/login", request.url));
-    }
+  if (!payload) {
+    return NextResponse.redirect(new URL("/auth/login", request.url));
+  }
 
-    if (pathname.startsWith("/admin") && payload.role !== "admin") {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
-
-    return NextResponse.next();
+  if (pathname.startsWith("/admin") && payload.role !== "admin") {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/dashboard/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/dashboard/:path*",
+    "/create-nft",
+    "/create-collection",
+    "/wallet",
+    "/settings",
+  ],
 };

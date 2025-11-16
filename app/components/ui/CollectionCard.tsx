@@ -106,14 +106,15 @@ export default function CollectionCard({
                   <div className="flex items-center mb-4">
                     <span className="text-light/60 mr-2">by</span>
                     <div className="flex items-center">
-                      <Image
-                        height={30}
-                        width={30}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        src={collection.creator.avatar}
-                        alt={collection.creator.name}
-                        className="rounded-full mr-2"
-                      />
+                      <div className="relative h-8 w-8 overflow-hidden rounded-full mr-2">
+                        <Image
+                          sizes="30px"
+                          src={collection.creator.avatar}
+                          alt={collection.creator.name}
+                          className="object-cover"
+                          fill
+                        />
+                      </div>
 
                       <span>{collection.creator.name}</span>
                       {collection.creator.isVerified && (
@@ -212,13 +213,15 @@ export default function CollectionCard({
               <div className="flex items-center">
                 <span className="text-sm text-light/60 mr-1">by</span>
                 <div className="flex items-center">
-                  <Image
-                    height={20}
-                    width={20}
-                    src={collection.creator.avatar}
-                    alt={collection.creator.name}
-                    className="rounded-full mr-1"
-                  />
+                  <div className="relative overflow-hidden rounded-full mr-1 h-6 w-6">
+                    <Image
+                      src={collection.creator.avatar}
+                      alt={collection.creator.name}
+                      className="object-cover object-top-center"
+                      sizes="32px"
+                      fill
+                    />
+                  </div>
 
                   <span className="text-sm">{collection.creator.name}</span>
                   {collection.creator.isVerified && (

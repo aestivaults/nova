@@ -1,12 +1,22 @@
 "use client";
 
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
+import dynamic from "next/dynamic";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+
+// Dynamically import only the React components
+const Swiper = dynamic(() => import("swiper/react").then((m) => m.Swiper), {
+  ssr: false,
+});
+const SwiperSlide = dynamic(
+  () => import("swiper/react").then((m) => m.SwiperSlide),
+  { ssr: false }
+);
+
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 
 export type SliderProps<T> = {
   items: T[];
@@ -43,6 +53,7 @@ export default function Slider<T>({
   const slides = useMemo(() => {
     if (children) return children;
     if (!items || !renderItem) return null;
+
     return items.map((item, index) => (
       <SwiperSlide key={index}>{renderItem(item, index)}</SwiperSlide>
     ));
@@ -50,24 +61,15 @@ export default function Slider<T>({
 
   const breakpoints = useMemo(
     () => ({
-      0: {
-        slidesPerView: 2,
-      },
-      640: {
-        slidesPerView: 3,
-      },
-      1024: {
-        slidesPerView: slidesToShow,
-      },
+      0: { slidesPerView: 2 },
+      640: { slidesPerView: 3 },
+      1024: { slidesPerView: slidesToShow },
     }),
     [slidesToShow]
   );
 
   const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  useEffect(() => setIsMounted(true), []);
 
   if (!isMounted) return null;
 
@@ -130,11 +132,12 @@ export default function Slider<T>({
           modules={[Navigation, Pagination, Autoplay]}
           loop={infiniteLoop}
           onBeforeInit={(swiper) => {
-            const navigation = swiper.params.navigation;
-
-            if (navigation && typeof navigation === "object") {
-              navigation.prevEl = prevRef.current;
-              navigation.nextEl = nextRef.current;
+            if (
+              swiper.params.navigation &&
+              typeof swiper.params.navigation === "object"
+            ) {
+              swiper.params.navigation.prevEl = prevRef.current;
+              swiper.params.navigation.nextEl = nextRef.current;
             }
           }}
           navigation={{
@@ -144,10 +147,7 @@ export default function Slider<T>({
           pagination={showDots ? { clickable: true } : false}
           autoplay={
             autoplay
-              ? {
-                  delay: autoplaySpeed,
-                  disableOnInteraction: false,
-                }
+              ? { delay: autoplaySpeed, disableOnInteraction: false }
               : false
           }
           breakpoints={breakpoints}

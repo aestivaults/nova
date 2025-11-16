@@ -1,144 +1,211 @@
-import { Edit, TriangleAlertIcon } from "lucide-react";
-import { cookies } from "next/headers";
-import Image from "next/image";
+"use client";
+import {
+  ChartLine,
+  Gavel,
+  GavelIcon,
+  Heart,
+  Image as ImageIcon,
+  Wallet2Icon,
+} from "lucide-react";
 import Link from "next/link";
 import Button from "../components/ui/button";
-import NavTabs from "../components/ui/Tabs";
-import { createServerApi } from "../utils/api";
-import { formatEthPrice } from "../utils/formatters";
-import DashboardWrapper from "./Dashboard";
+import CountdownTimer from "../components/ui/CountdownTimer";
+import NFTCard from "../components/ui/NFTCard";
+import { useAuth } from "../context/AuthContext";
+import { useNotifications } from "../context/NotificationProvider";
+import { formatEthPrice, formatRelativeTime } from "../utils/formatters";
+import { getActivityIcon } from "../utils/getIcons";
+import { useDashboardProvider } from "../context/DashboardProvider";
 
-export default async function CustomerDashboard() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
-  const refreshToken = cookieStore.get("refreshToken")?.value;
-  const serverApi = createServerApi(token, refreshToken);
+export default function CustomerDashboard() {
+  const { user } = useAuth();
+  const { notifications } = useNotifications();
 
-  const [userResult, bidsResult, likedNFTsResult, ownerNfts, ownerCollections] =
-    await Promise.allSettled([
-      serverApi.get("/users"),
-      serverApi.get("/users/bids"),
-      serverApi.get("/users/likes"),
-      serverApi.get("/users/nfts"),
-      serverApi.get("/users/collections"),
-    ]);
+  const { Bids, Nfts } = useDashboardProvider();
 
-  if (userResult.status !== "fulfilled")
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center container py-16 glass-card">
-          <div className="mb-4">
-            <TriangleAlertIcon
-              size={50}
-              className="text-4xl max-w-lg mx-auto text-red-500 mb-4"
-            />
-          </div>
-          <h3 className="text-xl font-medium mb-2">Something went wrong</h3>
-          <p className="text-white/60 mb-6">Please try again</p>
-        </div>
-      </div>
-    );
-
-  const user = userResult.value.data.data;
-
-  if (user instanceof Error)
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center container py-16 glass-card">
-          <div className="mb-4">
-            <TriangleAlertIcon
-              size={50}
-              className="text-4xl max-w-lg mx-auto text-red-500 mb-4"
-            />
-          </div>
-          <h3 className="text-xl font-medium mb-2">Something went wrong</h3>
-          <p className="text-white/60 mb-6">Please try again</p>
-        </div>
-      </div>
-    );
-
-  const activeBids =
-    bidsResult.status === "fulfilled" && !(bidsResult.value instanceof Error)
-      ? bidsResult.value.data.data
-      : [];
-  const likedNFTS =
-    likedNFTsResult.status === "fulfilled" &&
-    !(likedNFTsResult.value instanceof Error)
-      ? likedNFTsResult.value.data.data
-      : [];
-
-  const userNfts =
-    ownerNfts.status === "fulfilled" && !(ownerNfts.value instanceof Error)
-      ? ownerNfts.value.data.data
-      : [];
-
-  const userCollections =
-    ownerCollections.status === "fulfilled" &&
-    !(ownerCollections.value instanceof Error)
-      ? ownerCollections.value.data.data
-      : [];
+  const bidsTorender = Bids.filter(
+    (bid) =>
+      bid.nft?.auctionEndTime && new Date(bid.nft.auctionEndTime) > new Date()
+  );
 
   return (
-    <div className="py-25">
-      <div className="container">
-        <div className="glass-card p-3 md:p-6 mb-8">
-          <div className="flex gap-1.5 md:gap-6 items-start">
-            <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-primary-500">
-              <Image
-                sizes="40px"
-                fill
-                src={user?.avatar || "/pfp.png"}
-                alt={user?.username || "username"}
-                className="object-cover"
-              />
+    <div>
+      {/* Stats Row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="glass-card p-4">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-primary-900/50 flex items-center justify-center">
+              <Wallet2Icon />
             </div>
-
-            <div className="flex-1 md:text-left">
-              <h1 className="text-md sm:text-lg md:text-2xl mb-3 font-bold">
-                {user?.name || "Customer"}
-              </h1>
-
-              <Link href={"/dashboard/settings"} className="mt-4">
-                <Button variant="secondary" size="small" icon={<Edit />}>
-                  <span>Edit Profile</span>
-                </Button>
-              </Link>
-            </div>
-
-            <div className="flex flex-col items-center md:items-end">
-              <div className="text-center md:text-right">
-                <p className="text-white/60">Balance</p>
-                <p className="text-md md:text-xl font-bold text-primary-400">
-                  {formatEthPrice(user?.walletBalance ?? 0)}
-                </p>
-              </div>
-
-              <Link href={"/dashboard/create-nft"}>
-                <Button variant="outline">Create NFT</Button>
-              </Link>
+            <div>
+              <p className="text-white/60 text-sm">Balance</p>
+              <p className="text-xl font-bold">
+                {formatEthPrice(user?.walletBalance ?? 0)}
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Tabs */}
-        <NavTabs tabs={tabs} />
+        <div className="glass-card p-4">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-primary-900/50 flex items-center justify-center">
+              <Gavel className="text-primary-400" />
+            </div>
+            <div>
+              <p className="text-white/60 text-sm">Active Bids</p>
+              <p className="text-xl font-bold">
+                {Bids.filter((bid) => bid.status === "active").length}
+              </p>
+            </div>
+          </div>
+        </div>
 
-        <DashboardWrapper
-          LikedNFTS={likedNFTS}
-          usernfts={userNfts}
-          activeBids={activeBids}
-          collections={userCollections}
-          user={user}
-        />
+        <div className="glass-card p-4">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-primary-900/50 flex items-center justify-center">
+              <ImageIcon className="fas fa-images text-primary-400" />
+            </div>
+            <div>
+              <p className="text-white/60 text-sm">Owned NFTs</p>
+              <p className="text-xl font-bold">{Nfts?.length}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="glass-card p-4">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-primary-900/50 flex items-center justify-center">
+              <ChartLine className="text-primary-400" />
+            </div>
+            <div>
+              <p className="text-white/60 text-sm">Total Spent</p>
+              <p className="text-xl font-bold">{formatEthPrice(18.6)}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Activity and Active Bids */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="glass-card p-6 md:col-span-2">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-bold">Recent Activity</h3>
+          </div>
+
+          <div className="divide-y divide-white/10">
+            {notifications.slice(0, 7).map((activity) => (
+              <div key={activity._id} className="py-4 flex">
+                <div className="mr-4 mt-1">
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
+                    {getActivityIcon(activity.type)}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex  justify-between items-start">
+                    <h4 className="font-medium">{activity.title}</h4>
+                    <span className="text-sm text-white/60">
+                      {formatRelativeTime(String(activity.createdAt))}
+                    </span>
+                  </div>
+                  <p className="text-white/70">{activity.message}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="glass-card h-fit p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-bold">Active Bids</h3>
+            <Link href={"/my-bids"}>
+              <Button variant="text" size="small">
+                View All
+              </Button>
+            </Link>
+          </div>
+
+          <div className="space-y-4">
+            {bidsTorender.length > 0 ? (
+              bidsTorender.slice(0, 5).map((bid) => (
+                <div
+                  key={bid._id}
+                  className="flex justify-between items-center"
+                >
+                  <div>
+                    <div className="font-medium">{bid.nft?.title}</div>
+                    <div className="text-sm text-white/60">
+                      Ends in:
+                      <CountdownTimer
+                        endTime={bid.nft?.auctionEndTime ?? ""}
+                        size="small"
+                      />
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-bold text-primary-400">
+                      {formatEthPrice(bid.amount)}
+                    </div>
+                    <div className="text-xs text-white/60">
+                      {formatRelativeTime(bid.time)}
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center col-span-4 py-16">
+                <div className="mb-4">
+                  <GavelIcon
+                    size={50}
+                    className="text-4xl max-w-lg mx-auto text-red-500 mb-4"
+                  />
+                </div>
+                <h3 className="text-xl font-medium mb-2">No Bids</h3>
+                <p className="text-white/60 mb-6">
+                  You Dont have any Active Bids
+                </p>
+                <Link href="/create-nft">
+                  <Button variant="primary">Explore Marketplace</Button>
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Owned NFTs Preview */}
+      <div className="glass-card p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-bold">Your NFTs</h3>
+          <Link href={"/dashboard/my-nfts"}>
+            <Button variant="text" size="small">
+              View All
+            </Button>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {Nfts && Nfts?.length > 0 ? (
+            Nfts.slice(0, 4).map((nft) => (
+              <NFTCard key={nft._id} nft={nft} variant="compact" />
+            ))
+          ) : (
+            <div className="text-center col-span-4 py-16">
+              <div className="mb-4">
+                <Heart
+                  size={50}
+                  className="text-4xl max-w-lg mx-auto text-red-500 mb-4"
+                />
+              </div>
+              <h3 className="text-xl font-medium mb-2">No NFTs</h3>
+              <p className="text-white/60 mb-6">You Dont own any NFT&apos;s</p>
+              <Link href="/create-nft">
+                <Button variant="primary">Explore Marketplace</Button>
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 }
-
-const tabs = [
-  { key: "overview", label: "Overview" },
-  { key: "owned", label: "My NFTs" },
-  { key: "bids", label: "My Bids" },
-  { key: "liked", label: "Liked NFTs" },
-  { key: "collections", label: "My Collections" },
-];

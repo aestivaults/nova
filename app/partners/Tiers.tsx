@@ -1,7 +1,7 @@
-import { AlertCircle, CheckCircle, TrendingUp, Zap } from "lucide-react";
+import { AlertCircle, CheckCircle, TrendingUp } from "lucide-react";
+import Button from "../components/ui/button";
 import { partnerTiers } from "../data/data";
 import { getColorClasses } from "../utils/getIcons";
-import Button from "../components/ui/button";
 export default function Tiers() {
   return (
     <div className="space-y-6 sm:space-y-8">

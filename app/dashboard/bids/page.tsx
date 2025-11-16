@@ -1,12 +1,16 @@
+"use client";
 import { Gavel } from "lucide-react";
 import Image from "next/image";
-import Button from "../components/ui/button";
-import CountdownTimer from "../components/ui/CountdownTimer";
-import { Bid } from "../types/bids";
-import { formatEthPrice, formatRelativeTime } from "../utils/formatters";
+import Button from "../../components/ui/button";
+import CountdownTimer from "../../components/ui/CountdownTimer";
+import { Bid } from "../../types/bids";
+import { formatEthPrice, formatRelativeTime } from "../../utils/formatters";
 import Link from "next/link";
+import { useDashboardProvider } from "@/app/context/DashboardProvider";
 
-export default function MyBids({ activeBids }: { activeBids: Bid[] }) {
+export default function Page() {
+  const { Bids } = useDashboardProvider();
+
   const BidWithNFT = ({ bid }: { bid: Bid }) => (
     <div className="glass-card p-4 flex">
       <div className="w-20 relative h-20 rounded-lg overflow-hidden mr-4 flex-shrink-0">
@@ -88,9 +92,9 @@ export default function MyBids({ activeBids }: { activeBids: Bid[] }) {
         </div>
       </div>
 
-      {activeBids.length > 0 ? (
+      {Bids.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {activeBids.map((bid) => (
+          {Bids.map((bid) => (
             <BidWithNFT key={bid._id} bid={bid} />
           ))}
         </div>

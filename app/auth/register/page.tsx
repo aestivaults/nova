@@ -1,7 +1,6 @@
 "use client";
 import Button from "@/app/components/ui/button";
 import { useSetParams } from "@/app/hooks/useSetParams";
-import SignInButton from "../SignInButton";
 import { UseAuthForm } from "../useAuthForm";
 
 export default function AuthForm() {
@@ -181,7 +180,7 @@ export default function AuthForm() {
         </div>
       </form>
 
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-white/10"></div>
@@ -196,7 +195,7 @@ export default function AuthForm() {
         <div className="grid grid-cols-1 gap-3 mt-6">
           <SignInButton />
         </div>
-      </div>
+      </div> */}
 
       <div className="text-center mt-6">
         <p className="text-sm text-white/60">

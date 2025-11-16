@@ -119,7 +119,7 @@ export default function Footer() {
               <li></li>
               <li>
                 <Link
-                  href="/dashboard?tab=owned"
+                  href="/dashboard/my-nfts"
                   className="text-light/70 hover:text-primary-400 transition-colors"
                 >
                   My NFTs
@@ -127,7 +127,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/dashboard/wallet"
+                  href="/wallet"
                   className="text-light/70 hover:text-primary-400 transition-colors"
                 >
                   My Wallet
@@ -143,7 +143,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/dashboard/settings"
+                  href="/settings"
                   className="text-light/70 hover:text-primary-400 transition-colors"
                 >
                   Settings

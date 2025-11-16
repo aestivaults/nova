@@ -13,7 +13,7 @@ export default function NotificationCenter() {
   } = useNotifications();
 
   return (
-    <section className="py-25 min-h-screen">
+    <section className="min-h-[400px]">
       <div className="container">
         <h1 className="font-medium my-3">Notifications</h1>
 

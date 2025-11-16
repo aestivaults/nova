@@ -22,7 +22,7 @@ export default function NFTdetailPage({ nft }: { nft: NftPayload }) {
           </Link>
         </div>
         <NFTDetail nft={nft} />
-        <div className="mt-12">
+        {/* <div className="mt-12">
           <h3 className="text-2xl font-bold mb-6">More Like This</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <div className="col-span-full text-center py-8">
@@ -31,7 +31,7 @@ export default function NFTdetailPage({ nft }: { nft: NftPayload }) {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <PurchaseBid nft={nft} type="buy" />
     </section>

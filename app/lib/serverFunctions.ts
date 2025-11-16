@@ -74,3 +74,71 @@ export async function getReceivedBid() {
     );
   }
 }
+
+export async function getUser() {
+  const cookieStore = await cookies();
+  const accesstoken = cookieStore.get("token")?.value;
+  const refreshToken = cookieStore.get("refreshToken")?.value;
+
+  const serverapi = createServerApi(accesstoken, refreshToken);
+  try {
+    const { data } = await serverapi.get("/users");
+
+    return data.data;
+  } catch (error) {
+    throw new Error(
+      error instanceof Error ? error.message : "Something wernt wrong"
+    );
+  }
+}
+
+export async function getUserNfts() {
+  const cookieStore = await cookies();
+  const accesstoken = cookieStore.get("token")?.value;
+  const refreshToken = cookieStore.get("refreshToken")?.value;
+
+  const serverapi = createServerApi(accesstoken, refreshToken);
+
+  try {
+    const { data } = await serverapi.get("/users/nfts");
+    if (data.data) return data.data;
+  } catch (erorr) {
+    throw new Error(
+      erorr instanceof Error ? erorr.message : "failed to fetch transactions"
+    );
+  }
+}
+
+export async function getUserLikes() {
+  const cookieStore = await cookies();
+  const accesstoken = cookieStore.get("token")?.value;
+  const refreshToken = cookieStore.get("refreshToken")?.value;
+
+  const serverapi = createServerApi(accesstoken, refreshToken);
+
+  try {
+    const { data } = await serverapi.get("/users/likes");
+    if (data.data) return data.data;
+  } catch (erorr) {
+    throw new Error(
+      erorr instanceof Error ? erorr.message : "failed to fetch transactions"
+    );
+  }
+}
+
+export async function getUserCollections() {
+  const cookieStore = await cookies();
+  const accesstoken = cookieStore.get("token")?.value;
+  const refreshToken = cookieStore.get("refreshToken")?.value;
+
+  const serverapi = createServerApi(accesstoken, refreshToken);
+
+  try {
+    const { data } = await serverapi.get("/users/collections");
+    if (data.data) return data.data;
+  } catch (erorr) {
+    throw new Error(
+      erorr instanceof Error ? erorr.message : "failed to fetch transactions"
+    );
+  }
+}

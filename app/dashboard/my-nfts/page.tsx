@@ -1,14 +1,13 @@
+"use client";
+import Button from "@/app/components/ui/button";
+import NFTCard from "@/app/components/ui/NFTCard";
+import { useDashboardProvider } from "@/app/context/DashboardProvider";
 import { Images } from "lucide-react";
 import Link from "next/link";
-import Button from "../components/ui/button";
-import NFTCard from "../components/ui/NFTCard";
-import { NftPayload } from "../types/nftTypes";
 
-export default function UserNFTS({
-  ownedNFTs,
-}: {
-  ownedNFTs: NftPayload[] | undefined;
-}) {
+export default function Page() {
+  const { Nfts } = useDashboardProvider();
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -21,9 +20,9 @@ export default function UserNFTS({
         </div>
       </div>
 
-      {ownedNFTs && ownedNFTs.length > 0 ? (
+      {Nfts && Nfts.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6">
-          {ownedNFTs.map((nft) => (
+          {Nfts.map((nft) => (
             <NFTCard key={nft._id} nft={nft} />
           ))}
         </div>
