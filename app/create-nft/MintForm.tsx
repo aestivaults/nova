@@ -3,7 +3,7 @@ import { generateNftTokenId } from "@/app/backend/jwt/create_ids";
 import Button from "@/app/components/ui/button";
 import { useAuth } from "@/app/context/AuthContext";
 import { useNotifications } from "@/app/context/NotificationProvider";
-import { retryUploadImage } from "@/app/lib/uploadImages";
+import { uploadWithRetry } from "@/app/lib/uploadImages";
 import { CollectionPayload } from "@/app/types/collection";
 import { NftInput } from "@/app/types/nftTypes";
 import { api } from "@/app/utils/api";
@@ -95,9 +95,7 @@ export default function MintForm({
 
     try {
       setPending(true);
-      const [nftres] = await Promise.allSettled([
-        retryUploadImage(nft, "nfts"),
-      ]);
+      const [nftres] = await Promise.allSettled([uploadWithRetry(nft)]);
 
       if (nftres.status === "rejected") {
         toast("error", "system", "Mint Failed", "Please Try Again", 5000);

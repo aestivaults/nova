@@ -1,20 +1,11 @@
 "use client";
 
 import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
-import dynamic from "next/dynamic";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-
-// Dynamically import only the React components
-const Swiper = dynamic(() => import("swiper/react").then((m) => m.Swiper), {
-  ssr: false,
-});
-const SwiperSlide = dynamic(
-  () => import("swiper/react").then((m) => m.SwiperSlide),
-  { ssr: false }
-);
 
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 

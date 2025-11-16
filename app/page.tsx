@@ -13,6 +13,7 @@ export default async function Home() {
 
   try {
     const { data, error } = await getNfts("1");
+
     if (data) randomnfts = getRandomItems<NftPayload>(data, 20);
   } catch (error) {
     console.log(error);

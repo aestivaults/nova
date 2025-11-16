@@ -2,7 +2,7 @@
 import Button from "@/app/components/ui/button";
 import { PageLoader } from "@/app/components/ui/Loader";
 import { useNotifications } from "@/app/context/NotificationProvider";
-import { retryUploadImage } from "@/app/lib/uploadImages";
+import { uploadWithRetry } from "@/app/lib/uploadImages";
 import { User as Iuser } from "@/app/types/user";
 import { api } from "@/app/utils/api";
 import { parseCommaSeparated } from "@/app/utils/formatters";
@@ -171,7 +171,7 @@ export default function ProfileSettings() {
       let avatarUrl = profileForm.avatar;
 
       if (profileImg) {
-        avatarUrl = await retryUploadImage(profileImg, "profile images");
+        avatarUrl = await uploadWithRetry(profileImg);
         setProfileForm((prev) => ({ ...prev, avatar: avatarUrl }));
       }
 

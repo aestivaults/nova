@@ -1,7 +1,7 @@
 "use client";
 import { useAuth } from "@/app/context/AuthContext";
 import { useNotifications } from "@/app/context/NotificationProvider";
-import { retryUploadImage } from "@/app/lib/uploadImages";
+import { uploadWithRetry } from "@/app/lib/uploadImages";
 import { CollectionInput } from "@/app/types/collection";
 import { api } from "@/app/utils/api";
 import { AxiosError } from "axios";
@@ -53,9 +53,11 @@ export default function CreateCollectionPage() {
       setIsLoading(true);
 
       const [logoRes, bannerRes] = await Promise.allSettled([
-        retryUploadImage(logo_image, "collections"),
-        retryUploadImage(banner_image, "collections"),
+        uploadWithRetry(logo_image),
+        uploadWithRetry(banner_image),
       ]);
+
+      console.log(logoRes, bannerRes);
 
       if (logoRes.status === "rejected" || bannerRes.status === "rejected") {
         throw new Error("Failed to upload images");

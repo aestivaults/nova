@@ -31,6 +31,7 @@ export async function getNfts(page: string) {
     data = res.data.data;
     pagination = res.data.pagination;
   } catch (err) {
+    console.log(err);
     error =
       err instanceof AxiosError
         ? err.response?.data.message
