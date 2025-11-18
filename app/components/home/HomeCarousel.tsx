@@ -1,33 +1,37 @@
 "use client";
 import NFTCard from "@/app/components/ui/NFTCard";
 import { NftPayload } from "@/app/types/nftTypes";
-import { AnimatePresence, motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import Button from "../ui/button";
 import { useInView } from "@/app/hooks/inView";
+import Image from "next/image";
 
-const HeroCarousel = ({ data }: { data: NftPayload[] }) => {
+const HeroCarousel = memo(({ data }: { data: NftPayload[] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
   const { ref, inView } = useInView<HTMLDivElement>();
   const navigate = (path: string) => router.push(path);
 
   useEffect(() => {
-    if (!inView) return;
+    if (!inView || isHovered) return;
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % data.length);
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [inView, data.length]);
+  }, [inView, isHovered, data.length]);
 
   const current = data[currentSlide];
 
   return (
     <div
       ref={ref}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className="relative md:h-[600px] h-screen p-8 w-full overflow-hidden bg-gradient-to-b from-dark to-darker"
     >
       <AnimatePresence mode="wait">
@@ -49,9 +53,17 @@ const HeroCarousel = ({ data }: { data: NftPayload[] }) => {
               className="w-full h-full object-cover"
             />
           ) : (
-            <div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${current?.media_url})` }}
+            <Image
+              src={current.media_url}
+              fill
+              alt="background image"
+              priority
+              quality={85}
+              className="object-cover"
+              sizes="100vw"
+              placeholder="blur"
+              blurDataURL={"/logo.png"}
+              unoptimized={current.media_url.endsWith(".gif")} // only if you have gifs/webp issues
             />
           )}
 
@@ -103,17 +115,15 @@ const HeroCarousel = ({ data }: { data: NftPayload[] }) => {
                   className="flex flex-wrap gap-4"
                 >
                   <Button
+                    icon={<Sparkles />}
                     onClick={() => navigate(`/marketplace/${current._id}`)}
-                    className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group"
                   >
-                    <Sparkles className="w-5 h-5 mr-2 relative z-10" />
-                    <span className="relative z-10">View Nft </span>
+                    View Nft
                   </Button>
                 </motion.div>
               </motion.div>
             </AnimatePresence>
 
-            {/* Right Content - NFT Preview */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={current?._id}
@@ -123,7 +133,7 @@ const HeroCarousel = ({ data }: { data: NftPayload[] }) => {
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="relative"
               >
-                <div className="relative max-h-[90%] aspect-[4/5] w-full max-w-md">
+                <div className="relative aspect-[4/5] w-full max-w-md mx-auto lg:mx-0">
                   <NFTCard variant="compact" nft={current} />
                 </div>
               </motion.div>
@@ -133,6 +143,8 @@ const HeroCarousel = ({ data }: { data: NftPayload[] }) => {
       </div>
     </div>
   );
-};
+});
+
+HeroCarousel.displayName = "HeroCarousel";
 
 export default HeroCarousel;

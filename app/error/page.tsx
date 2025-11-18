@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import { motion } from "framer-motion";
+import { useEffect, useMemo } from "react";
+import Button from "../components/ui/button";
 
 // Heroicon: Exclamation Triangle (for a better UI icon)
 const ErrorIcon = () => (
@@ -41,18 +41,8 @@ const ErrorPage: React.FC = () => {
   }, [redirectUrl, timeout]);
 
   return (
-    <motion.section
-      className="min-h-screen flex items-center justify-center px-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.6 }}
-    >
-      <motion.div
-        className="glass-card p-8 max-w-md w-full text-center border border-red-200"
-        initial={{ scale: 0.9, y: 30 }}
-        animate={{ scale: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-      >
+    <section className="min-h-screen flex items-center justify-center px-4">
+      <div className="glass-card p-8 max-w-md w-full text-center border border-red-200">
         <ErrorIcon />
 
         <h1 className="text-2xl font-semibold text-red-600 mb-2">
@@ -65,16 +55,11 @@ const ErrorPage: React.FC = () => {
           {seconds !== 1 ? "s" : ""}...
         </p>
 
-        <motion.button
-          className="btn btn-primary mt-6 px-5 py-2 rounded bg-red-500 hover:bg-red-600 text-white transition"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => (window.location.href = redirectUrl)}
-        >
+        <Button onClick={() => (window.location.href = redirectUrl)}>
           Try Again
-        </motion.button>
-      </motion.div>
-    </motion.section>
+        </Button>
+      </div>
+    </section>
   );
 };
 

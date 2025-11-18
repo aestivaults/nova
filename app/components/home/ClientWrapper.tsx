@@ -6,9 +6,17 @@ import { useQuery } from "@tanstack/react-query";
 import { Suspense } from "react";
 import Auction from "./Auction";
 import Hero from "./hero";
-import HeroCarousel from "./HomeCarousel";
 import Stats from "./stats";
 import TrendingNFTs from "./TrendingNfts";
+import dynamic from "next/dynamic";
+
+const HeroCarousel = dynamic(
+  () => import("@/app/components/home/HomeCarousel"),
+  {
+    ssr: false, // or true if you want SSR HTML
+    loading: () => <div className="min-h-screen bg-black/50"></div>,
+  }
+);
 
 export default function ClientWrapper({
   initialData,

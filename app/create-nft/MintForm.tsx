@@ -7,7 +7,6 @@ import { uploadWithRetry } from "@/app/lib/uploadImages";
 import { CollectionPayload } from "@/app/types/collection";
 import { NftInput } from "@/app/types/nftTypes";
 import { api } from "@/app/utils/api";
-import { motion } from "framer-motion";
 import { CloudUpload, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -316,35 +315,8 @@ export default function MintForm({
             </p>
           </div>
           <div className="flex gap-4">
-            <Button
-              type="submit"
-              disabled={pending}
-              className="w-full bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white font-medium py-3 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
-            >
-              {pending ? (
-                <motion.div
-                  className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
-                  animate={{ rotate: 360 }}
-                  transition={{
-                    duration: 1,
-                    repeat: Infinity,
-                    ease: "linear",
-                  }}
-                />
-              ) : (
-                <>
-                  <motion.div
-                    className="absolute inset-0 bg-white/20"
-                    animate={{ x: ["-100%", "100%"] }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                  />
-                  <span className="relative z-10">Create NFT</span>
-                </>
-              )}
+            <Button isLoading={pending} type="submit" disabled={pending}>
+              Create NFT
             </Button>
           </div>
         </div>

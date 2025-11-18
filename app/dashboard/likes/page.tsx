@@ -1,12 +1,11 @@
 "use client";
+import { getUserLikes } from "@/app/lib/clientFunctions";
+import { NftPayload } from "@/app/types/nftTypes";
+import { useQuery } from "@tanstack/react-query";
 import { Filter, Heart } from "lucide-react";
 import Link from "next/link";
 import Button from "../../components/ui/button";
 import NFTCard from "../../components/ui/NFTCard";
-import { useQuery } from "@tanstack/react-query";
-import { getUserLikes } from "@/app/lib/clientFunctions";
-import { NftPayload } from "@/app/types/nftTypes";
-import { NFTGridSkeleton } from "@/app/components/ui/Loader";
 
 export default function Page() {
   const { data: LikedNFTS, isLoading } = useQuery<NftPayload[], Error>({
@@ -14,7 +13,8 @@ export default function Page() {
     queryFn: getUserLikes,
   });
 
-  if (isLoading) return <NFTGridSkeleton />;
+  if (isLoading)
+    return <div className="min-h-screen bg-black/50 animate-pulse"></div>;
 
   if (!LikedNFTS)
     return (

@@ -1,13 +1,12 @@
 "use client";
+import { getUserCollections } from "@/app/lib/clientFunctions";
+import { CollectionPayload } from "@/app/types/collection";
+import { useQuery } from "@tanstack/react-query";
 import { FolderOpen, Plus } from "lucide-react";
 import Image from "next/image";
 import Button from "../../components/ui/button";
 import { useSetParams } from "../../hooks/useSetParams";
 import { formatEthPrice } from "../../utils/formatters";
-import { useQuery } from "@tanstack/react-query";
-import { getUserCollections } from "@/app/lib/clientFunctions";
-import { CollectionPayload } from "@/app/types/collection";
-import { NFTGridSkeleton } from "@/app/components/ui/Loader";
 
 export default function Page() {
   const { navigate } = useSetParams();
@@ -18,7 +17,8 @@ export default function Page() {
     }
   );
 
-  if (isLoading || !collections) return <NFTGridSkeleton />;
+  if (isLoading || !collections)
+    return <div className="min-h-screen bg-black/50 animate-pulse"></div>;
 
   return (
     <div>
